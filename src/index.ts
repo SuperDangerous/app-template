@@ -7,6 +7,7 @@
 
 import { StandardServer, createLogger, ConfigManager } from '@episensor/app-framework';
 import { setupApp } from './setupApp.js';
+import { WebSocketService } from './services/websocket.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -50,6 +51,8 @@ if (process.env.DESKTOP === 'true') {
     await configManager.initialize();
     const config = configManager.get();
     
+    let webSocketService: WebSocketService | undefined;
+    
     const server = new StandardServer({
       appName: config.app.name,
       appVersion: config.app.version,
@@ -59,8 +62,18 @@ if (process.env.DESKTOP === 'true') {
       enableWebSocket: config.features.enableWebSocket,
       
       onInitialize: async (app) => {
+        // Initialize WebSocket service if enabled
+        if (config.features.enableWebSocket) {
+          const httpServer = server.getServer();
+          webSocketService = new WebSocketService(httpServer, {
+            corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:3001',
+            pingInterval: parseInt(process.env.WS_HEARTBEAT_INTERVAL || '30000'),
+            pingTimeout: parseInt(process.env.WS_CONNECTION_TIMEOUT || '60000')
+          });
+        }
+        
         // Setup all routes and middleware
-        await setupApp(app, configManager);
+        await setupApp(app, configManager, webSocketService);
       }
     });
 

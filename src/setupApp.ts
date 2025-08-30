@@ -18,16 +18,22 @@ import {
 // Import your custom routes
 import { createExampleRouter } from './api/example.js';
 import { createDataRouter } from './api/data.js';
+import { createWebSocketRouter } from './api/websocket.js';
+import { createUploadRouter } from './api/upload.js';
+import { createUsersRouter } from './api/users.js';
 
 // Import middleware
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+
+// Import services
+import { WebSocketService } from './services/websocket.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const logger = createLogger('Setup');
 
-export async function setupApp(app: Express, configManager: ConfigManager): Promise<void> {
+export async function setupApp(app: Express, configManager: ConfigManager, webSocketService?: WebSocketService): Promise<void> {
   const config = configManager.get();
   
   // Setup middleware
@@ -81,7 +87,10 @@ export async function setupApp(app: Express, configManager: ConfigManager): Prom
         health: '/api/health',
         logs: '/api/logs',
         example: '/api/example',
-        data: '/api/data'
+        data: '/api/data',
+        websocket: '/api/websocket',
+        upload: '/api/upload',
+        users: '/api/users'
       }
     });
   });
@@ -91,6 +100,13 @@ export async function setupApp(app: Express, configManager: ConfigManager): Prom
   app.use('/api/logs', standardLogsRouter);
   app.use('/api/example', createExampleRouter(configManager));
   app.use('/api/data', createDataRouter());
+  app.use('/api/upload', createUploadRouter());
+  app.use('/api/users', createUsersRouter());
+  
+  // Setup WebSocket API if WebSocket service is available
+  if (webSocketService) {
+    app.use('/api/websocket', createWebSocketRouter(webSocketService));
+  }
   
   // Catch-all route for React app (only in production)
   if (process.env.NODE_ENV === 'production' && process.env.SERVE_FRONTEND === 'true') {

@@ -304,34 +304,223 @@ queue.registerHandler('send-email', async (data) => {
 await queue.enqueue('send-email', { to: 'user@example.com' });
 ```
 
+## CI/CD
+
+### GitHub Actions Pipeline
+Production-ready continuous integration and deployment:
+- **Automated Testing**: Comprehensive unit and integration test execution
+- **Code Quality**: ESLint, Prettier, and TypeScript strict mode validation
+- **Security Scanning**: Dependency vulnerability audits and SAST analysis
+- **Build Verification**: Multi-environment build testing and validation
+- **Performance Testing**: API response time and memory usage monitoring
+- **Docker Integration**: Multi-stage container builds with security scanning
+
+### Deployment Strategy
+1. **Development**: Feature branch development with automated testing
+2. **Staging**: Automated deployment to staging environment for integration testing
+3. **Production**: Blue-green deployment with zero-downtime releases
+4. **Monitoring**: Real-time health checks and performance monitoring
+5. **Rollback**: Instant rollback capability for production issues
+
+### Release Management
+- **Semantic Versioning**: Automated version management with conventional commits
+- **Release Automation**: Tagged releases with automated changelog generation
+- **Environment Promotion**: Automated promotion from staging to production
+- **Feature Flags**: Configuration-driven feature rollout and A/B testing
+
+## Architecture
+
+### System Architecture Overview
+```
+┌─────────────────────────┐    ┌─────────────────────────┐
+│     Web Interface       │◄──►│      API Server         │
+│   (Optional Frontend)   │    │    (Express.js)         │
+│   ┌─────────────────┐   │    │   ┌─────────────────┐   │
+│   │ React/Vue/HTML  │   │    │   │ REST APIs       │   │
+│   │ User Interface  │   │    │   │ Business Logic  │   │
+│   │ Admin Panels    │   │    │   │ Data Processing │   │
+│   └─────────────────┘   │    │   └─────────────────┘   │
+└─────────────────────────┘    └─────────────────────────┘
+             │                              │
+             ▼                              ▼
+┌─────────────────────────┐    ┌─────────────────────────┐
+│   WebSocket Manager     │    │   Configuration System  │
+│   (Real-time Updates)   │    │   (Hot-reload Config)   │
+└─────────────────────────┘    └─────────────────────────┘
+             │                              │
+             ▼                              ▼
+┌─────────────────────────┐    ┌─────────────────────────┐
+│     Core Services       │    │      Data Storage       │
+│   ┌─────────────────┐   │    │   ┌─────────────────┐   │
+│   │ Health Monitor  │   │    │   │ Database/Files  │   │
+│   │ Session Mgmt    │   │    │   │ Configuration   │   │
+│   │ Error Handling  │   │    │   │ Logs & Metrics  │   │
+│   │ Security Layer  │   │    │   │ Cache Layer     │   │
+│   └─────────────────┘   │    │   └─────────────────┘   │
+└─────────────────────────┘    └─────────────────────────┘
+```
+
+### Framework Integration
+Built on the @episensor/app-framework foundation:
+
+#### StandardServer
+- **Express.js Integration**: Pre-configured Express server with best practices
+- **Middleware Stack**: Security, CORS, rate limiting, request logging
+- **Error Handling**: Centralized error processing with structured logging
+- **Health Endpoints**: Built-in health checks for monitoring and load balancing
+
+#### Configuration Management
+- **Layered Config**: Default → File → Environment variable override
+- **Hot Reload**: Runtime configuration updates without restart
+- **Schema Validation**: Zod-based configuration validation
+- **Environment-Aware**: Automatic development/production configuration
+
+#### Monitoring & Observability
+- **Health Checks**: System health, dependencies, and custom checks
+- **Metrics Collection**: CPU, memory, disk, and custom business metrics
+- **Structured Logging**: Winston-based logging with multiple transports
+- **Request Tracing**: Request/response logging with correlation IDs
+
+### Security Architecture
+- **Session Management**: Secure session handling with configurable storage
+- **CORS Configuration**: Environment-aware cross-origin request handling
+- **Input Validation**: Zod schema validation for all API inputs
+- **Error Sanitization**: Secure error responses preventing information leakage
+
+## Testing
+
+### Test Strategy Overview
+Comprehensive testing approach for production readiness:
+- **Unit Tests**: Service layer and business logic validation
+- **Integration Tests**: API endpoint and database integration testing
+- **Contract Tests**: API contract validation and backward compatibility
+- **Performance Tests**: Load testing and memory leak detection
+- **Security Tests**: Vulnerability scanning and penetration testing
+
+### Test Execution
+```bash
+# Complete test suite
+npm test
+
+# Specific test categories
+npm run test:unit          # Unit tests only
+npm run test:integration   # Integration tests
+npm run test:coverage      # Coverage reporting
+npm run test:watch         # Development watch mode
+
+# Performance and load testing
+npm run test:load          # Load testing with custom scenarios
+npm run test:memory        # Memory leak detection
+```
+
+### Quality Metrics
+- **Code Coverage**: Minimum 80% line coverage requirement
+- **Performance**: API response times under 100ms for simple endpoints
+- **Reliability**: 99.9% uptime requirement for production deployments
+- **Security**: Zero high-severity vulnerabilities in dependencies
+
 ## Troubleshooting
 
-### Port Already in Use
+### Common Development Issues
 
+#### Port Conflicts
 ```bash
 # Find process using port
 lsof -i :3000
-
-# Kill process
 kill -9 <PID>
 
 # Or use different port
 PORT=3001 npm start
+
+# Check configured ports
+npm run check:ports
 ```
 
-### Configuration Not Loading
+#### Configuration Issues
+1. **Config Not Loading**: Check file path `data/config/app.json`
+2. **JSON Syntax**: Validate JSON syntax with online validator
+3. **File Permissions**: Ensure read access to config directory
+4. **Debug Logging**: Enable verbose logging `LOG_LEVEL=debug npm start`
 
-1. Check file path: `data/config/app.json`
-2. Verify JSON syntax
-3. Check file permissions
-4. Enable debug logging: `LOG_LEVEL=debug npm start`
+#### Framework Integration Problems
+- **Module Resolution**: Ensure @episensor/app-framework is properly installed
+- **Version Compatibility**: Check framework version compatibility
+- **TypeScript Issues**: Verify TypeScript configuration and types
+
+### Production Troubleshooting
+```bash
+# Health check endpoints
+curl http://localhost:3000/api/health
+curl http://localhost:3000/api/health/metrics
+curl http://localhost:3000/api/health/ready
+
+# Log analysis
+tail -f data/logs/application.log
+grep -i error data/logs/application.log
+
+# Performance monitoring
+npm run monitor:performance
+```
+
+## Contributing
+
+### Development Standards
+1. **TypeScript**: Full type safety with strict configuration
+2. **Code Style**: ESLint and Prettier with EpiSensor standards
+3. **Testing**: Comprehensive test coverage for all new features
+4. **Documentation**: Inline JSDoc and README updates
+5. **Security**: Secure coding practices and dependency management
+
+### Development Workflow
+1. **Fork Template**: Create new repository from this template
+2. **Feature Development**: Use feature branches with conventional commits
+3. **Local Testing**: Run full test suite before committing
+4. **Code Review**: Peer review for all changes
+5. **Integration**: Ensure CI/CD pipeline passes
+
+### Framework Contributions
+For contributions to the underlying framework:
+1. Submit issues to @episensor/app-framework repository
+2. Follow framework contribution guidelines
+3. Maintain backward compatibility
+4. Update template examples as needed
+
+### Issue Classification
+- `bug`: Software defects or unexpected behavior
+- `enhancement`: New features or improvements
+- `framework`: Issues related to @episensor/app-framework
+- `template`: Template-specific issues or improvements
+- `documentation`: Documentation updates or clarifications
 
 ## Support
 
-- Documentation: [Framework Docs](https://docs.episensor.com/framework)
-- Issues: [GitHub Issues](https://github.com/episensor/epi-app-template/issues)
-- Internal: Contact the Platform Team
+### Documentation Resources
+- **Framework Documentation**: [EpiSensor App Framework Docs](../epi-app-framework/README.md)
+- **API Reference**: Complete REST API documentation with examples
+- **Configuration Guide**: Detailed configuration options and environment setup
+- **Deployment Guide**: Production deployment best practices and procedures
+- **Troubleshooting**: Common issues and resolution procedures
+
+### Support Channels
+- **GitHub Issues**: [Template Issues](https://github.com/episensor/epi-app-template/issues)
+- **Framework Issues**: [@episensor/app-framework Issues](../epi-app-framework/issues)
+- **Internal Support**: Platform Team for EpiSensor-specific questions
+- **Community**: Internal developer community and knowledge sharing
+
+### Training & Resources
+- **Video Tutorials**: Framework overview and template usage examples
+- **Best Practices**: EpiSensor development standards and patterns
+- **Code Examples**: Real-world implementation examples and patterns
+- **Architecture Reviews**: Guidance on application architecture decisions
 
 ## License
 
-MIT © EpiSensor
+**MIT License**
+
+Copyright (c) 2025 EpiSensor Ltd.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
