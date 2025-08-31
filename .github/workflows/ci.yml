@@ -19,6 +19,30 @@ jobs:
           mkdir -p ../epi-app-framework/dist
           
           # Create main framework package.json with types
+          echo '{"name":"@episensor/app-framework","version":"3.6.0","type":"module","main":"dist/index.js","types":"dist/index.d.ts","exports":{".": "./dist/index.js"}}' > ../epi-app-framework/package.json
+          
+          # Create framework stub files
+          echo "export function createLogger(name) { return { info: () => {}, error: () => {}, debug: () => {}, warn: () => {} }; }" > ../epi-app-framework/dist/index.js
+          echo "export class StandardServer { constructor() {} async initialize() {} async start() {} getServer() { return {}; } }" >> ../epi-app-framework/dist/index.js
+          echo "export class ConfigManager { constructor() {} get() { return {}; } async initialize() {} async update(key, value) { return Promise.resolve(); } reset() {} }" >> ../epi-app-framework/dist/index.js
+          echo "export function configureSession(app, options) { return {}; }" >> ../epi-app-framework/dist/index.js
+          echo "export function createHealthCheckRouter(options) { return { use: () => {}, get: () => {}, post: () => {} }; }" >> ../epi-app-framework/dist/index.js
+          echo "export const logsRouter = { use: () => {}, get: () => {}, post: () => {} };" >> ../epi-app-framework/dist/index.js
+          
+          # Create type definitions
+          echo "export declare function createLogger(name: string): any;" > ../epi-app-framework/dist/index.d.ts
+          echo "export declare class StandardServer { constructor(config: any); initialize(): Promise<void>; start(): Promise<void>; getServer(): any; }" >> ../epi-app-framework/dist/index.d.ts
+          echo "export declare class ConfigManager { constructor(config: any); get(): any; initialize(): Promise<void>; update(key: string, value: any): Promise<void>; reset(): void; }" >> ../epi-app-framework/dist/index.d.ts
+          echo "export declare function configureSession(app: any, options: any): any;" >> ../epi-app-framework/dist/index.d.ts
+          echo "export declare function createHealthCheckRouter(options: any): any;" >> ../epi-app-framework/dist/index.d.ts
+          echo "export declare const logsRouter: any;" >> ../epi-app-framework/dist/index.d.ts
+
+      - name: Setup Framework Stubs
+        run: |
+          # Create stub framework packages for CI
+          mkdir -p ../epi-app-framework/dist
+          
+          # Create main framework package.json with types
           echo '{"name":"@episensor/app-framework","version":"3.6.0","type":"module","main":"dist/index.js","types":"dist/index.d.ts","exports":{".":"./dist/index.js"}}' > ../epi-app-framework/package.json
           
           # Create framework stub files
