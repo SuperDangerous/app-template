@@ -1,0 +1,36 @@
+{
+  "name": "EpiSensor App Template",
+  "version": "1.0.0",
+  "description": "Template for EpiSensor Tauri desktop applications",
+  "ports": {
+    "api": 8080,
+    "web": 5173,
+    "websocket": 8080
+  },
+  "development": {
+    "autoStart": true,
+    "openBrowser": false,
+    "logLevel": "info"
+  },
+  "production": {
+    "bundleBackend": true,
+    "autoStart": true,
+    "logLevel": "warn"
+  },
+  "database": {
+    "path": "./data/app.db",
+    "backup": true
+  },
+  "logging": {
+    "level": "info",
+    "file": "./data/logs/app.log",
+    "maxSize": "10MB",
+    "maxFiles": 10
+  },
+  "security": {
+    "cors": {
+      "enabled": true,
+      "origins": ["http://localhost:5173", "tauri://localhost"]
+    }
+  }
+}
