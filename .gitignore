@@ -65,3 +65,5 @@ temp/
 # OS files
 Thumbs.db
 Desktop.ini
+# Claude AI
+.claude/
