@@ -84,6 +84,9 @@ jobs:
       - name: Build frontend
         run: npm run build:web
 
+      - name: Bundle sidecar server
+        run: npm run build:sidecar
+
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:

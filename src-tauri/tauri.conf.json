@@ -5,7 +5,7 @@
   "identifier": "com.episensor.app-template",
   "build": {
     "beforeDevCommand": "cd web && npm run dev",
-    "beforeBuildCommand": "cd web && npm run build",
+    "beforeBuildCommand": "VITE_API_URL=http://localhost:8080 cd web && npm run build && cd .. && npm run build:sidecar",
     "devUrl": "http://localhost:5173",
     "frontendDist": "../web/dist"
   },
@@ -38,7 +38,9 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "resources": [],
+    "resources": {
+      "binaries/server-*": "./server"
+    },
     "externalBin": [],
     "copyright": "",
     "category": "DeveloperTool",

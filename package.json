@@ -1,6 +1,6 @@
 {
   "name": "@episensor/app-template",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Template for EpiSensor Tauri desktop applications with Node.js backend",
   "type": "module",
   "main": "dist/index.js",
@@ -20,6 +20,7 @@
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build",
+    "build:sidecar": "npm run build:api && npx esbuild dist/index.js --bundle --platform=node --target=node20 --format=cjs --outfile=dist/server/bundle.cjs --external:sharp --external:canvas --external:bufferutil --external:utf-8-validate && npx pkg dist/server/bundle.cjs --targets node20-macos-arm64,node20-macos-x64,node20-win-x64,node20-linux-x64 --output-path src-tauri/binaries --compress GZip",
     "clean": "rm -rf dist web/dist",
     "setup": "npm install && cd web && npm install"
   },
@@ -45,6 +46,7 @@
     "@typescript-eslint/parser": "^8.18.2",
     "eslint": "^9.32.0",
     "jest": "^30.0.5",
+    "pkg": "^5.8.1",
     "prettier": "^3.5.1",
     "ts-jest": "^29.4.1",
     "tsx": "^4.20.4",
