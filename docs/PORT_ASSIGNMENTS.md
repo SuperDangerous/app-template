@@ -20,7 +20,7 @@ Each app gets 5 consecutive ports:
 | **epi-cpcodebase** | 7000-7004 | 7000 | 7001 | 7000 | ✅ Active |
 | **epi-competitor-ai** | 7005-7009 | 7005 | 7006 | 7005 | ✅ Active |
 | **epi-modbus-simulator** | 7010-7014 | 7010 | 7011 | 7010 | ✅ Active |
-| **epi-origami-simulator** | 7015-7019 | 7015 | 7016 | 7015 | ✅ Active |
+| **epi-vpp-manager** | 7015-7019 | 7015 | 7016 | 7015 | ✅ Active |
 | **epi-node-programmer** | 7020-7024 | 7020 | 7021 | 7020 | ✅ Active |
 | **epi-app-template** | 7500-7504 | 7500 | 7501 | 7500 | 📋 Template |
 
