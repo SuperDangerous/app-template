@@ -15,8 +15,8 @@ async function main() {
     description: 'A comprehensive template for building EpiSensor desktop applications',
     port: 8080,
     webPort: 5173, // Development web UI port (Vite default)
+    appId: 'com.episensor.app-template', // Required for Tauri CORS configuration
     // Desktop integration will be automatically enabled when TAURI=1
-    // appId will be auto-generated as 'com.episensor.episensor-app-template'
     enableWebSocket: true,
     
     onInitialize: async (app: express.Application) => {
