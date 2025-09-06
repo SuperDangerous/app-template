@@ -40,7 +40,7 @@ const appConfigSchema = z.object({
   security: z.object({
     cors: z.object({
       enabled: z.boolean().default(true),
-      origins: z.array(z.string()).default(['http://localhost:5173', 'tauri://localhost'])
+      origins: z.array(z.string()).default(['http://localhost:7501', 'tauri://localhost'])
     })
   }),
   features: z.object({
@@ -56,9 +56,9 @@ export type AppConfig = z.infer<typeof appConfigSchema>;
 // App-specific defaults
 const defaultConfig: Partial<AppConfig> = {
   ports: {
-    api: 8080,
-    web: 5173,
-    websocket: 8080
+    api: 7500,
+    web: 7501,
+    websocket: 7500
   },
   development: {
     autoStart: true,
@@ -79,7 +79,7 @@ const defaultConfig: Partial<AppConfig> = {
   security: {
     cors: {
       enabled: true,
-      origins: ['http://localhost:5173', 'tauri://localhost']
+      origins: ['http://localhost:7501', 'tauri://localhost']
     }
   },
   features: {
