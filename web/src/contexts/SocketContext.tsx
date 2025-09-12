@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 interface SocketContextType {
@@ -6,44 +6,42 @@ interface SocketContextType {
   connected: boolean;
 }
 
-const SocketContext = createContext<SocketContextType>({
+export const SocketContext = createContext<SocketContextType>({
   socket: null,
   connected: false,
 });
 
-export const useSocket = () => useContext(SocketContext);
-
-interface SocketProviderProps {
-  children: ReactNode;
-}
-
-export function SocketProvider({ children }: SocketProviderProps) {
+export function SocketProvider({ children }: { children: React.ReactNode }) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-    const newSocket = io(socketUrl, {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:7000';
+    const socketInstance = io(apiUrl, {
+      transports: ['websocket', 'polling'],
       reconnection: true,
+      reconnectionAttempts: 5,
       reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      reconnectionAttempts: Infinity,
     });
 
-    newSocket.on('connect', () => {
-      console.log('Socket connected');
+    socketInstance.on('connect', () => {
+      console.log('Connected to WebSocket server');
       setConnected(true);
     });
 
-    newSocket.on('disconnect', () => {
-      console.log('Socket disconnected');
+    socketInstance.on('disconnect', () => {
+      console.log('Disconnected from WebSocket server');
       setConnected(false);
     });
 
-    setSocket(newSocket);
+    socketInstance.on('connect_error', (error) => {
+      console.error('WebSocket connection error:', error.message);
+    });
+
+    setSocket(socketInstance);
 
     return () => {
-      newSocket.close();
+      socketInstance.disconnect();
     };
   }, []);
 
@@ -52,4 +50,8 @@ export function SocketProvider({ children }: SocketProviderProps) {
       {children}
     </SocketContext.Provider>
   );
+}
+
+export function useSocket() {
+  return useContext(SocketContext);
 }

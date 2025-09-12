@@ -13,27 +13,19 @@ import { apiRequest } from './lib/api';
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [appInfo, setAppInfo] = useState({ name: 'My App', version: '1.0.0' });
+  const [appInfo, setAppInfo] = useState({ name: 'App Template', version: '1.0.0' });
 
   useEffect(() => {
     // Fetch app info from backend and set page title
-    apiRequest('/api/app/info')
+    apiRequest('/api/config')
       .then(info => {
         setAppInfo(info);
-        document.title = info.name;
+        document.title = info.name || 'App Template';
       })
       .catch(err => {
         console.error('Failed to fetch app info:', err);
-        // Fallback to app.json
-        fetch('/app.json')
-          .then(res => res.json())
-          .then(config => {
-            setAppInfo({ name: config.name, version: config.version });
-            document.title = config.name;
-          })
-          .catch(() => {
-            document.title = 'My App';
-          });
+        // Fallback to default
+        document.title = 'App Template';
       });
   }, []);
 
@@ -52,7 +44,7 @@ const AppContent: React.FC = () => {
       currentPath={location.pathname}
       onNavigate={navigate}
       showConnectionStatus={true}
-      connectionStatusUrl={import.meta.env.VITE_API_URL || 'http://localhost:8080'}
+      connectionStatusUrl={import.meta.env.VITE_API_URL || 'http://localhost:7500'}
       primaryColor="#E21350"
       showLogout={false}
     >

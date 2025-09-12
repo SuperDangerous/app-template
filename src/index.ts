@@ -3,7 +3,7 @@
  * Uses @episensor/app-framework with enhanced settings and logging
  */
 
-import { StandardServer, createLogger } from '@episensor/app-framework';
+import { StandardServer, createLogger, logsRouter } from '@episensor/app-framework';
 import express from 'express';
 
 const logger = createLogger('AppTemplate');
@@ -20,6 +20,9 @@ async function main() {
     
     onInitialize: async (app: express.Application) => {
       logger.info('Setting up app-specific routes and middleware');
+      
+      // Add logs router
+      app.use('/api/logs', logsRouter);
       
       // Example API routes
       app.get('/api/example', (_req, res) => {
@@ -69,10 +72,6 @@ async function main() {
           logger.error('Failed to compact logs:', error);
         }
       }, 24 * 60 * 60 * 1000); // Run daily
-    },
-    
-    onShutdown: async () => {
-      logger.info('Server shutting down gracefully');
     }
   });
   

@@ -1,103 +1,198 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@episensor/app-framework/ui';
-import { Activity, Cpu, HardDrive, Wifi } from 'lucide-react';
+import { Card, Button } from '@episensor/app-framework/ui';
+import { Activity, Server, Database, Cpu, HardDrive, Wifi, Settings, FileText } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { apiRequest } from '@/lib/api';
+
+interface SystemStats {
+  uptime: number;
+  memory?: {
+    used: number;
+    total: number;
+  };
+  cpu?: {
+    usage: number;
+  };
+}
 
 export function HomePage() {
+  const navigate = useNavigate();
+  const [stats, setStats] = useState<SystemStats | null>(null);
+  const [appInfo, setAppInfo] = useState({ 
+    name: 'EpiSensor App Template', 
+    version: '1.1.0',
+    description: 'Template application'
+  });
+
+  useEffect(() => {
+    // Fetch app info
+    apiRequest('/api/config')
+      .then(setAppInfo)
+      .catch(console.error);
+
+    // Fetch system stats
+    const fetchStats = () => {
+      apiRequest('/api/health')
+        .then(setStats)
+        .catch(console.error);
+    };
+
+    fetchStats();
+    const interval = setInterval(fetchStats, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold">Welcome to Your App</h1>
-        <p className="text-muted-foreground mt-2">
-          Get started by customizing this template for your needs.
-        </p>
+    <div className="space-y-6">
+      {/* Welcome Section */}
+      <Card className="p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Welcome to {appInfo.name}
+            </h1>
+            <p className="mt-2 text-gray-600 dark:text-gray-400">
+              {appInfo.description || 'A comprehensive template for building EpiSensor applications'}
+            </p>
+          </div>
+          <Activity className="h-12 w-12 text-pink-500" />
+        </div>
+      </Card>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card className="p-4">
+          <div className="flex items-center space-x-3">
+            <Server className="h-8 w-8 text-blue-500" />
+            <div>
+              <p className="text-sm text-gray-500">Status</p>
+              <p className="text-lg font-semibold text-green-600">Online</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center space-x-3">
+            <Database className="h-8 w-8 text-purple-500" />
+            <div>
+              <p className="text-sm text-gray-500">Version</p>
+              <p className="text-lg font-semibold">{appInfo.version}</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center space-x-3">
+            <Wifi className="h-8 w-8 text-green-500" />
+            <div>
+              <p className="text-sm text-gray-500">Connection</p>
+              <p className="text-lg font-semibold">Active</p>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center space-x-3">
+            <Cpu className="h-8 w-8 text-orange-500" />
+            <div>
+              <p className="text-sm text-gray-500">Uptime</p>
+              <p className="text-lg font-semibold">
+                {stats ? `${Math.floor(stats.uptime / 60)}m` : '—'}
+              </p>
+            </div>
+          </div>
+        </Card>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Status</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">Active</div>
-            <p className="text-xs text-muted-foreground">
-              System is running normally
-            </p>
-          </CardContent>
+      {/* Feature Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4 flex items-center">
+            <Activity className="h-5 w-5 mr-2 text-pink-500" />
+            Getting Started
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            This template provides everything you need to build your application:
+          </p>
+          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <li className="flex items-start">
+              <span className="text-pink-500 mr-2">•</span>
+              Configure application settings with validation
+            </li>
+            <li className="flex items-start">
+              <span className="text-pink-500 mr-2">•</span>
+              Monitor application logs in real-time
+            </li>
+            <li className="flex items-start">
+              <span className="text-pink-500 mr-2">•</span>
+              Add custom API endpoints and business logic
+            </li>
+            <li className="flex items-start">
+              <span className="text-pink-500 mr-2">•</span>
+              WebSocket support for real-time features
+            </li>
+            <li className="flex items-start">
+              <span className="text-pink-500 mr-2">•</span>
+              Deploy as web app or desktop app with Tauri
+            </li>
+          </ul>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">CPU Usage</CardTitle>
-            <Cpu className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">23%</div>
-            <p className="text-xs text-muted-foreground">
-              +2% from last hour
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Memory</CardTitle>
-            <HardDrive className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">45%</div>
-            <p className="text-xs text-muted-foreground">
-              2.1GB of 4.6GB used
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Network</CardTitle>
-            <Wifi className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">Connected</div>
-            <p className="text-xs text-muted-foreground">
-              Low latency
-            </p>
-          </CardContent>
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4 flex items-center">
+            <HardDrive className="h-5 w-5 mr-2 text-blue-500" />
+            Built-in Features
+          </h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Framework features ready to use:
+          </p>
+          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <li className="flex items-start">
+              <span className="text-blue-500 mr-2">✓</span>
+              Enhanced logging with rotation and compression
+            </li>
+            <li className="flex items-start">
+              <span className="text-blue-500 mr-2">✓</span>
+              Dynamic settings with hot reload
+            </li>
+            <li className="flex items-start">
+              <span className="text-blue-500 mr-2">✓</span>
+              File upload and storage service
+            </li>
+            <li className="flex items-start">
+              <span className="text-blue-500 mr-2">✓</span>
+              Session and authentication middleware
+            </li>
+            <li className="flex items-start">
+              <span className="text-blue-500 mr-2">✓</span>
+              Health check and monitoring endpoints
+            </li>
+          </ul>
         </Card>
       </div>
 
-      <div className="mt-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Start</CardTitle>
-            <CardDescription>
-              This template provides everything you need to build an EpiSensor internal app
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h3 className="font-semibold mb-2">Key Features</h3>
-              <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                <li>TypeScript + React + Vite for fast development</li>
-                <li>Tauri for desktop packaging across platforms</li>
-                <li>EpiSensor App Framework for consistent functionality</li>
-                <li>WebSocket support for real-time updates</li>
-                <li>Built-in logging and configuration</li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-2">Next Steps</h3>
-              <ol className="list-decimal list-inside space-y-1 text-sm text-muted-foreground">
-                <li>Update app.json with your app details</li>
-                <li>Modify the navigation and pages for your use case</li>
-                <li>Add your business logic and API endpoints</li>
-                <li>Customize the UI components and styling</li>
-                <li>Build and distribute your desktop app</li>
-              </ol>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Actions */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4">Quick Actions</h2>
+        <div className="flex flex-wrap gap-3">
+          <Button onClick={() => navigate('/settings')}>
+            <Settings className="h-4 w-4 mr-2" />
+            Configure Settings
+          </Button>
+          <Button variant="outline" onClick={() => navigate('/logs')}>
+            <FileText className="h-4 w-4 mr-2" />
+            View Logs
+          </Button>
+          <Button variant="outline" onClick={() => window.location.reload()}>
+            Refresh Application
+          </Button>
+        </div>
+      </Card>
+
+      {/* Footer */}
+      <div className="text-center text-sm text-gray-500 dark:text-gray-400 pt-4">
+        <p>Built with EpiSensor App Framework v4.3.0</p>
+        <p className="mt-1">Ready for your business logic</p>
       </div>
     </div>
   );
