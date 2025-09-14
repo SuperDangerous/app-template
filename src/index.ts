@@ -17,7 +17,7 @@ import {
   logsRouter,
   displayStartupBanner,
   WebSocketEventManager,
-  StorageService,
+  getStorageService,
   healthCheck
 } from '@episensor/app-framework';
 import express from 'express';
@@ -29,7 +29,7 @@ import { settingsMetadata } from './config/settings.js';
 const logger = createLogger('EpiApp');
 
 // Initialize storage service
-const storageService = new StorageService();
+const storageService = getStorageService();
 
 // WebSocket event manager (will be initialized after server starts)
 let wsEventManager: WebSocketEventManager | null = null;

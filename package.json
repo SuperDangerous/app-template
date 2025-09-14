@@ -23,7 +23,7 @@
     "setup": "npm install && cd web && npm install"
   },
   "dependencies": {
-    "@episensor/app-framework": "^4.3.0",
+    "@episensor/app-framework": "^4.3.1",
     "boxen": "^8.0.1",
     "concurrently": "^9.1.0",
     "cors": "^2.8.5",
