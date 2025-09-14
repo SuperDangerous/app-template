@@ -1,6 +1,7 @@
 /**
  * Basic test suite for EpiSensor App Template
  */
+import { describe, it, expect } from 'vitest';
 
 describe('App Template', () => {
   it('should pass basic test', () => {
