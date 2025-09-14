@@ -56,24 +56,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Checkout framework
-        uses: actions/checkout@v4
-        with:
-          repository: episensor/app-framework
-          path: ../epi-app-framework
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-
-      - name: Build framework
-        working-directory: ../epi-app-framework
-        run: |
-          npm ci
-          npm run build
 
       - name: Install dependencies
         run: |

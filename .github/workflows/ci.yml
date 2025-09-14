@@ -61,6 +61,7 @@ jobs:
 
   build-tauri:
     needs: test  # Only build if tests pass
+    if: success()  # Only run if tests pass
     strategy:
       fail-fast: false
       matrix:
