@@ -17,7 +17,7 @@ import {
   logsRouter,
   displayStartupBanner,
   WebSocketEventManager,
-  getStorageService,
+  StorageService,
   healthCheck
 } from '@episensor/app-framework';
 import express from 'express';
@@ -29,7 +29,7 @@ import { settingsMetadata } from './config/settings.js';
 const logger = createLogger('EpiApp');
 
 // Initialize storage service
-const storageService = getStorageService();
+const storageService = new StorageService();
 
 // WebSocket event manager (will be initialized after server starts)
 let wsEventManager: WebSocketEventManager | null = null;
@@ -152,7 +152,7 @@ async function main() {
             data: {
               directories: dirs,
               fileCount: files.length,
-              totalSize: files.reduce((sum, f) => sum + f.size, 0)
+              totalSize: files.reduce((sum: number, f: any) => sum + f.size, 0)
             },
             message: 'Storage information'
           });
