@@ -6,8 +6,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Package manager locks - template should not commit these
-package-lock.json
+# Package manager locks - keep package-lock.json for CI
+# package-lock.json  # Needed for CI/CD
 yarn.lock
 pnpm-lock.yaml
 
