@@ -4,7 +4,7 @@
  */
 
 import path from 'path';
-import fs from 'fs-extra';
+import fs from 'fs';
 import { getAppDataPath, getDataFilePath, isDesktopApp } from '@episensor/app-framework';
 
 // Configure these for your application
@@ -54,7 +54,9 @@ export function getSettingsFilePath(): string {
 export function getLogsPath(): string {
   if (isDesktopApp()) {
     const logsPath = path.join(getAppDataPath(APP_ID, APP_NAME), 'logs');
-    fs.ensureDirSync(logsPath);
+    if (!fs.existsSync(logsPath)) {
+      fs.mkdirSync(logsPath, { recursive: true });
+    }
     return logsPath;
   }
   return path.join(process.cwd(), 'logs');
@@ -76,7 +78,9 @@ export function getStateFilePath(): string {
 export function getUploadsPath(): string {
   const dataPath = getDataPath();
   const uploadsDir = path.join(dataPath, 'uploads');
-  fs.ensureDirSync(uploadsDir);
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
   return uploadsDir;
 }
 
@@ -84,7 +88,7 @@ export function getUploadsPath(): string {
  * Ensure a directory exists
  */
 export async function ensureDirectory(dirPath: string): Promise<void> {
-  await fs.ensureDir(dirPath);
+  await fs.promises.mkdir(dirPath, { recursive: true });
 }
 
 // Re-export isDesktopApp for convenience
