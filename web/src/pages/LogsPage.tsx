@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { LogViewer, LogStats } from '@episensor/app-framework/ui';
+import { LogViewer, LogStats } from '../components/ui-stubs';
 import { api } from '../utils/api';
 
 interface LogEntry {
@@ -25,7 +25,7 @@ interface LogStatsData {
   newestEntry?: string;
 }
 
-export default function LogsPage() {
+export function LogsPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [stats, setStats] = useState<LogStatsData | null>(null);
   const [loading, setLoading] = useState(false);

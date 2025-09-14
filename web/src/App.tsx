@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { AppShell } from '@episensor/app-framework/ui';
+import { AppShell } from './components/AppShell';
 import { Toaster } from 'sonner';
 import { Home, Settings, FileText } from 'lucide-react';
 import { HomePage } from './pages/HomePage';

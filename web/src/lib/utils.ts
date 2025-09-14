@@ -1,4 +1,4 @@
-import { cn } from '@episensor/app-framework/ui';
+import { cn } from '../components/ui-stubs';
 
 export { cn };
 

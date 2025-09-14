@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle, FileText, HardDrive, FileCode, FileJson, Image, Archive, FileType, File } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, Button, Checkbox, Badge } from '@episensor/app-framework/ui';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, Button, Checkbox, Badge } from '../components/ui-stubs';
 import { formatBytes, cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import { apiRequest } from '@/lib/api';

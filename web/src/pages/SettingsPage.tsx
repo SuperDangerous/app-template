@@ -3,10 +3,10 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { SettingsFramework } from '@episensor/app-framework/ui';
+import { SettingsFramework } from '../components/ui-stubs';
 import { api } from '../utils/api';
 
-export default function SettingsPage() {
+export function SettingsPage() {
   const [settings, setSettings] = useState<Record<string, any>>({});
   const [definitions, setDefinitions] = useState([]);
   const [loading, setLoading] = useState(true);
