@@ -28,9 +28,27 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref_name || github.event.inputs.tag }}
-          name: Release ${{ github.ref_name || github.event.inputs.tag }}
+          name: EpiSensor App Template ${{ github.ref_name || github.event.inputs.tag }}
           draft: true
           prerelease: false
+          body: |
+            ## 🚀 EpiSensor App Template Release
+            
+            ### ✨ Features
+            - Comprehensive settings management with persistence
+            - WebSocket support with real-time communication  
+            - EpiSensor professional branding and UI
+            - Health monitoring and diagnostics endpoints
+            - Full TypeScript and modern tooling support
+            
+            ### 📦 What's Included
+            - Batteries-included template for EpiSensor applications
+            - Integration with @episensor/app-framework
+            - Production-ready CI/CD configuration
+            - Cross-platform desktop app support via Tauri
+            
+            ### 📥 Downloads
+            Platform-specific builds are available below.
 
   build-and-test:
     runs-on: ubuntu-latest
@@ -38,46 +56,37 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-
-      - name: Setup Framework Stubs
-        run: |
-          # Create stub framework packages for CI
-          mkdir -p ../epi-app-framework/dist
-          
-          # Create main framework package.json with types
-          echo '{"name":"@episensor/app-framework","version":"3.6.0","type":"module","main":"dist/index.js","types":"dist/index.d.ts","exports":{".":"./dist/index.js"}}' > ../epi-app-framework/package.json
-          
-          # Create framework stub files
-          echo "export function createLogger(name) { return { info: () => {}, error: () => {}, debug: () => {}, warn: () => {} }; }" > ../epi-app-framework/dist/index.js
-          echo "export class StandardServer { constructor() {} async initialize() {} async start() {} getServer() { return {}; } }" >> ../epi-app-framework/dist/index.js
-          echo "export class ConfigManager { constructor() {} get() { return {}; } async initialize() {} async update(key, value) { return Promise.resolve(); } reset() {} }" >> ../epi-app-framework/dist/index.js
-          echo "export function configureSession(app, options) { return {}; }" >> ../epi-app-framework/dist/index.js
-          echo "export function createHealthCheckRouter(options) { return { use: () => {}, get: () => {}, post: () => {} }; }" >> ../epi-app-framework/dist/index.js
-          echo "export const logsRouter = { use: () => {}, get: () => {}, post: () => {} };" >> ../epi-app-framework/dist/index.js
-          
-          # Create type definitions
-          echo "export declare function createLogger(name: string): any;" > ../epi-app-framework/dist/index.d.ts
-          echo "export declare class StandardServer { constructor(config: any); initialize(): Promise<void>; start(): Promise<void>; getServer(): any; }" >> ../epi-app-framework/dist/index.d.ts
-          echo "export declare class ConfigManager { constructor(config: any); get(): any; initialize(): Promise<void>; update(key: string, value: any): Promise<void>; reset(): void; }" >> ../epi-app-framework/dist/index.d.ts
-          echo "export declare function configureSession(app: any, options: any): any;" >> ../epi-app-framework/dist/index.d.ts
-          echo "export declare function createHealthCheckRouter(options: any): any;" >> ../epi-app-framework/dist/index.d.ts
-          echo "export declare const logsRouter: any;" >> ../epi-app-framework/dist/index.d.ts
+      - name: Checkout framework
+        uses: actions/checkout@v4
+        with:
+          repository: episensor/app-framework
+          path: ../epi-app-framework
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: package-lock.json
+
+      - name: Build framework
+        working-directory: ../epi-app-framework
+        run: |
+          npm ci
+          npm run build
 
       - name: Install dependencies
-        run: npm install --no-audit --legacy-peer-deps
+        run: |
+          npm ci
+          cd web && npm ci
 
       - name: Run tests
         run: npm test
 
       - name: Build application
-        run: npm run build
+        run: |
+          npm run build:api
+          npm run build:web
 
       - name: Create release archive
         run: |
@@ -96,8 +105,90 @@ jobs:
           files: ./app-template-${{ github.ref_name || github.event.inputs.tag }}.tar.gz
           draft: true
 
+  build-tauri:
+    needs: create-release
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest'
+            target: 'aarch64-apple-darwin'
+            name: 'macOS-ARM64'
+          - platform: 'macos-latest'
+            target: 'x86_64-apple-darwin' 
+            name: 'macOS-Intel'
+          - platform: 'ubuntu-22.04'
+            target: 'x86_64-unknown-linux-gnu'
+            name: 'Linux-x64'
+          - platform: 'windows-latest'
+            target: 'x86_64-pc-windows-msvc'
+            name: 'Windows-x64'
+    
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout framework
+        uses: actions/checkout@v4
+        with:
+          repository: episensor/app-framework
+          path: ../epi-app-framework
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Setup Rust cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install dependencies (Ubuntu)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Build framework
+        working-directory: ../epi-app-framework
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install Node dependencies
+        run: |
+          npm ci
+          cd web && npm ci
+
+      - name: Build frontend
+        run: npm run build:web
+
+      - name: Build API
+        run: npm run build:api
+
+      - name: Bundle sidecar server
+        run: npm run build:sidecar
+        continue-on-error: true
+
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ needs.create-release.outputs.release_id }}
+          args: --target ${{ matrix.target }}
+
   publish-release:
-    needs: [create-release, build-and-test]
+    needs: [create-release, build-and-test, build-tauri]
     runs-on: ubuntu-latest
     steps:
       - name: Publish release
