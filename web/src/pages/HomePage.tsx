@@ -1,4 +1,4 @@
-import { Card, Button } from '../components/ui-stubs';
+import { Card, Button } from '@episensor/app-framework/ui';
 import { Activity, Server, Database, Cpu, HardDrive, Wifi, Settings, FileText } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';

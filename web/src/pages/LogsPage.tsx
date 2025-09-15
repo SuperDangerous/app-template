@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { LogViewer, LogStats } from '../components/ui-stubs';
+import { LogViewer, LogStats } from '@episensor/app-framework/ui';
 import { api } from '../utils/api';
 
 interface LogEntry {

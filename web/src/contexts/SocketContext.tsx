@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import React, { createContext, useContext } from 'react';
+import { useSocketIO, useConnectionStatus } from '@episensor/app-framework/ui';
+import { Socket } from 'socket.io-client';
 
 interface SocketContextType {
   socket: Socket | null;
@@ -12,41 +13,12 @@ export const SocketContext = createContext<SocketContextType>({
 });
 
 export function SocketProvider({ children }: { children: React.ReactNode }) {
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const [connected, setConnected] = useState(false);
-
-  useEffect(() => {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:7000';
-    const socketInstance = io(apiUrl, {
-      transports: ['websocket', 'polling'],
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-    });
-
-    socketInstance.on('connect', () => {
-      console.log('Connected to WebSocket server');
-      setConnected(true);
-    });
-
-    socketInstance.on('disconnect', () => {
-      console.log('Disconnected from WebSocket server');
-      setConnected(false);
-    });
-
-    socketInstance.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error.message);
-    });
-
-    setSocket(socketInstance);
-
-    return () => {
-      socketInstance.disconnect();
-    };
-  }, []);
+  // Use the framework's useSocketIO hook - it will automatically connect through the Vite proxy
+  const [socketState, socketActions] = useSocketIO();
+  const { connected } = useConnectionStatus();
 
   return (
-    <SocketContext.Provider value={{ socket, connected }}>
+    <SocketContext.Provider value={{ socket: socketActions.socket, connected }}>
       {children}
     </SocketContext.Provider>
   );

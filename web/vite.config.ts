@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-const API_PORT = process.env.VITE_API_URL?.split(':')[2] || '8080';
+const API_PORT = process.env.VITE_API_URL?.split(':')[2] || '7500';
 
 console.log(`📦 Vite config: Using API port ${API_PORT}`);
 

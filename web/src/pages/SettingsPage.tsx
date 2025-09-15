@@ -3,7 +3,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { SettingsFramework } from '../components/ui-stubs';
+import { SettingsFramework } from '@episensor/app-framework/ui';
 import { api } from '../utils/api';
 
 export function SettingsPage() {

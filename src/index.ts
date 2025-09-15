@@ -80,9 +80,24 @@ async function main() {
       app.use('/api/logs', logsRouter);
       app.use('/api/settings', settingsRouter);
       
+      // Config endpoint for frontend
+      app.get('/api/config', (_req, res) => {
+        res.json({
+          success: true,
+          data: {
+            appName: settings['app.name'] || 'EpiSensor App Template',
+            appVersion: '1.1.0',
+            apiUrl: `http://localhost:${settings['network.apiPort'] || 7500}`,
+            websocketEnabled: settings['network.enableWebSocket'] !== false,
+            environment: settings['advanced.environment'] || process.env.NODE_ENV || 'production'
+          },
+          message: 'Application configuration'
+        });
+      });
+
       // Health and monitoring endpoints
       app.use('/api/health', healthCheck);
-      
+
       app.get('/api/health/detailed', async (_req, res) => {
         res.json({ 
           success: true,

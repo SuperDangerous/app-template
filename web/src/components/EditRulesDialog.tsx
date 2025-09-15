@@ -25,7 +25,7 @@ export function EditRulesDialog({ project, onClose, onSave }: EditRulesDialogPro
   useEffect(() => {
     const fetchGitignoreContent = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:7000'}/api/projects/${project.id}/gitignore`);
+        const response = await fetch(`/api/projects/${project.id}/gitignore`);
         if (response.ok) {
           const data = await response.json();
           setGitignoreContent(data.content);
