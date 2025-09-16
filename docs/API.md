@@ -14,7 +14,7 @@ The template uses the framework's standardised Express.js setup:
 import express from 'express';
 import { 
   ConfigManager, 
-  enhancedLogger, 
+  getLogger, 
   healthCheck,
   cors,
   auth 
@@ -22,7 +22,7 @@ import {
 
 const app = express();
 const config = ConfigManager.getInstance();
-const logger = enhancedLogger.createLogger({ service: 'your-app' });
+const logger = getLogger().createLogger('your-app');
 
 // Standard middleware
 app.use(express.json());

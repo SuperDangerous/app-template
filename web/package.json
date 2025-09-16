@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5173",
+    "dev": "vite --port 8502",
     "build": "cross-env VITE_API_URL=http://localhost:8080 vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
@@ -11,7 +11,7 @@
     "lint:fix": "eslint src --ext ts,tsx --fix"
   },
   "dependencies": {
-    "@episensor/app-framework": "^4.3.2",
+    "@episensor/app-framework": "file:../../epi-app-framework",
     "@radix-ui/react-checkbox": "^1.3.3",
     "@radix-ui/react-dialog": "^1.1.4",
     "@radix-ui/react-dropdown-menu": "^2.1.4",

@@ -207,26 +207,9 @@ The template automatically generates CSS custom properties from your configurati
 Configure structured logging with the framework's enhanced logger:
 
 ```typescript
-import { enhancedLogger } from '@episensor/app-framework';
+import { getLogger } from '@episensor/app-framework';
 
-const logger = enhancedLogger.createLogger({
-  level: config.get('LOG_LEVEL') || 'info',
-  service: config.get('name'),
-  version: config.get('version'),
-  transports: [
-    {
-      type: 'console',
-      format: 'simple',
-      colorize: true
-    },
-    {
-      type: 'file',
-      filename: config.get('LOG_FILE_PATH') || './logs/app.log',
-      maxsize: config.get('LOG_MAX_SIZE') || '10MB',
-      maxFiles: config.get('LOG_MAX_FILES') || 5
-    }
-  ]
-});
+const logger = getLogger().createLogger('App');
 ```
 
 ### Log Categories

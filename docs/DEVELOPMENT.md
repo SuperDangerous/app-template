@@ -122,11 +122,11 @@ npm run test:coverage
 ```typescript
 // src/index.ts - Main server setup
 import express from 'express';
-import { ConfigManager, enhancedLogger } from '@episensor/app-framework';
+import { ConfigManager, getLogger } from '@episensor/app-framework';
 
 const app = express();
 const config = ConfigManager.getInstance();
-const logger = enhancedLogger.createLogger({ service: config.get('name') });
+const logger = getLogger().createLogger('App');
 
 // Load configuration
 await config.loadConfig('app.json');
@@ -142,9 +142,7 @@ export default app;
 ```typescript
 // src/services/DataService.ts
 export class DataService {
-  private logger = enhancedLogger.createLogger({ 
-    service: 'DataService' 
-  });
+  private logger = getLogger().createLogger('DataService');
 
   async getData(filters: DataFilters): Promise<DataResponse> {
     this.logger.info('Fetching data', { filters });

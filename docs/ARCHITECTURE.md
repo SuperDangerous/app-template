@@ -10,7 +10,7 @@ The framework provides **generic, reusable services** that work across all EpiSe
 
 #### **Core Services**
 - **ConfigManager**: Schema validation, file watching, environment variable merging
-- **enhancedLogger**: Structured logging with multiple transports
+- **getLogger**: Structured logging with rotation and compression
 - **WebSocketManager**: Socket.IO management with rooms, authentication, Redis scaling
 - **healthCheck**: Standard health monitoring endpoints
 - **portUtils**: Dynamic port allocation and conflict detection
