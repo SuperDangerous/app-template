@@ -4,6 +4,13 @@
   "description": "Template for EpiSensor Tauri desktop applications with Node.js backend",
   "type": "module",
   "main": "dist/index.js",
+  "devServer": {
+    "backendPort": 7500,
+    "frontendPort": 7501,
+    "webSocketPort": 7500,
+    "backendCommand": "tsx watch src/index.ts",
+    "frontendCommand": "cd web && npx vite --port 7501"
+  },
   "scripts": {
     "dev": "dev-server",
     "build": "npm run build:api && npm run build:web",
@@ -12,6 +19,11 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report",
+    "test:all": "npm run test && npm run test:e2e",
     "lint": "eslint src/ --ext .ts",
     "lint:fix": "eslint src/ --ext .ts --fix",
     "typecheck": "tsc --noEmit",
@@ -23,7 +35,7 @@
     "setup": "npm install && cd web && npm install"
   },
   "dependencies": {
-    "@episensor/app-framework": "^4.3.2",
+    "@episensor/app-framework": "file:../epi-app-framework",
     "boxen": "^8.0.1",
     "concurrently": "^9.1.0",
     "cors": "^2.8.5",
@@ -35,6 +47,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
+    "@playwright/test": "^1.55.0",
     "@tauri-apps/api": "^2.1.1",
     "@tauri-apps/cli": "^2.1.0",
     "@tauri-apps/plugin-shell": "^2.0.1",
@@ -47,6 +60,7 @@
     "@vitest/ui": "^3.2.4",
     "eslint": "^9.32.0",
     "pkg": "^5.8.1",
+    "playwright": "^1.55.0",
     "prettier": "^3.5.1",
     "tsx": "^4.20.5",
     "typescript": "^5.7.2",
@@ -63,11 +77,5 @@
   "private": true,
   "engines": {
     "node": ">=18.0.0"
-  },
-  "devServer": {
-    "backendPort": 7500,
-    "frontendPort": 7501,
-    "backendCommand": "tsx watch src/index.ts",
-    "frontendCommand": "cd web && npm run dev"
   }
 }

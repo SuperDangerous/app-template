@@ -1,77 +1,249 @@
 /**
- * Settings Page using the new framework approach
+ * Settings Page using the framework's SettingsPage component
  */
 
-import React, { useEffect, useState } from 'react';
-import { SettingsFramework } from '@episensor/app-framework/ui';
+import React from 'react';
+import { SettingsPage as FrameworkSettingsPage, defaultSettingsCategories } from '@episensor/app-framework/ui';
+import { Settings, Network, FileText, Shield, Bell } from 'lucide-react';
 import { api } from '../utils/api';
+import { toast } from 'sonner';
+
+// Define app-specific settings categories
+const appCategories = [
+  {
+    id: 'general',
+    label: 'General',
+    description: 'Basic application settings',
+    icon: <Settings className="h-4 w-4" />,
+    settings: [
+      {
+        key: 'app.name',
+        label: 'Application Name',
+        description: 'The name displayed in the UI',
+        type: 'text' as const,
+        defaultValue: 'App Template'
+      },
+      {
+        key: 'app.theme',
+        label: 'Theme',
+        description: 'Choose your preferred theme',
+        type: 'select' as const,
+        defaultValue: 'light',
+        options: [
+          { value: 'light', label: 'Light' },
+          { value: 'dark', label: 'Dark' },
+          { value: 'system', label: 'System' }
+        ]
+      },
+      {
+        key: 'app.autoUpdate',
+        label: 'Auto Update',
+        description: 'Automatically check for updates',
+        type: 'boolean' as const,
+        defaultValue: true
+      }
+    ]
+  },
+  {
+    id: 'network',
+    label: 'Network',
+    description: 'Network and connectivity settings',
+    icon: <Network className="h-4 w-4" />,
+    settings: [
+      {
+        key: 'network.apiUrl',
+        label: 'API URL',
+        description: 'Backend API endpoint',
+        type: 'text' as const,
+        defaultValue: 'http://localhost:7500',
+        validation: (value: string) => {
+          if (!value) return 'API URL is required';
+          try {
+            new URL(value);
+            return null;
+          } catch {
+            return 'Invalid URL format';
+          }
+        }
+      },
+      {
+        key: 'network.timeout',
+        label: 'Request Timeout (ms)',
+        description: 'Maximum time to wait for API requests',
+        type: 'number' as const,
+        defaultValue: 30000,
+        min: 1000,
+        max: 120000
+      },
+      {
+        key: 'network.retryAttempts',
+        label: 'Retry Attempts',
+        description: 'Number of times to retry failed requests',
+        type: 'number' as const,
+        defaultValue: 3,
+        min: 0,
+        max: 10
+      }
+    ]
+  },
+  {
+    id: 'logging',
+    label: 'Logging',
+    description: 'Logging configuration',
+    icon: <FileText className="h-4 w-4" />,
+    settings: [
+      {
+        key: 'logging.level',
+        label: 'Log Level',
+        description: 'Minimum level of logs to capture',
+        type: 'select' as const,
+        defaultValue: 'info',
+        options: [
+          { value: 'error', label: 'Error' },
+          { value: 'warn', label: 'Warning' },
+          { value: 'info', label: 'Info' },
+          { value: 'debug', label: 'Debug' },
+          { value: 'verbose', label: 'Verbose' }
+        ],
+        requiresRestart: true
+      },
+      {
+        key: 'logging.console',
+        label: 'Console Output',
+        description: 'Show logs in browser console',
+        type: 'boolean' as const,
+        defaultValue: true
+      },
+      {
+        key: 'logging.maxFiles',
+        label: 'Max Log Files',
+        description: 'Maximum number of log files to keep',
+        type: 'number' as const,
+        defaultValue: 5,
+        min: 1,
+        max: 20
+      }
+    ]
+  },
+  {
+    id: 'security',
+    label: 'Security',
+    description: 'Security settings',
+    icon: <Shield className="h-4 w-4" />,
+    settings: [
+      {
+        key: 'security.sessionTimeout',
+        label: 'Session Timeout (minutes)',
+        description: 'Automatically log out after inactivity',
+        type: 'number' as const,
+        defaultValue: 30,
+        min: 5,
+        max: 1440
+      },
+      {
+        key: 'security.enableHttps',
+        label: 'Force HTTPS',
+        description: 'Redirect all HTTP traffic to HTTPS',
+        type: 'boolean' as const,
+        defaultValue: false,
+        requiresRestart: true
+      }
+    ]
+  },
+  {
+    id: 'notifications',
+    label: 'Notifications',
+    description: 'Notification preferences',
+    icon: <Bell className="h-4 w-4" />,
+    settings: [
+      {
+        key: 'notifications.desktop',
+        label: 'Desktop Notifications',
+        description: 'Show desktop notifications for important events',
+        type: 'boolean' as const,
+        defaultValue: true
+      },
+      {
+        key: 'notifications.sound',
+        label: 'Sound Alerts',
+        description: 'Play sound for notifications',
+        type: 'boolean' as const,
+        defaultValue: false
+      }
+    ]
+  }
+];
 
 export function SettingsPage() {
-  const [settings, setSettings] = useState<Record<string, any>>({});
-  const [definitions, setDefinitions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  
-  useEffect(() => {
+  const [values, setValues] = React.useState<Record<string, any>>({});
+  const [loading, setLoading] = React.useState(true);
+  const [saving, setSaving] = React.useState(false);
+  const [showRestartBanner, setShowRestartBanner] = React.useState(false);
+
+  React.useEffect(() => {
     loadSettings();
   }, []);
-  
+
   const loadSettings = async () => {
     try {
       setLoading(true);
-      setError(null);
-      
-      // Load both settings and definitions
-      const [settingsRes, definitionsRes] = await Promise.all([
-        api.get('/api/settings'),
-        api.get('/api/settings/definitions')
-      ]);
-      
-      setSettings(settingsRes.data || {});
-      setDefinitions(definitionsRes.data || []);
-    } catch (err) {
-      setError('Failed to load settings');
-      console.error('Settings load error:', err);
+      const response = await api.get('/api/settings');
+      setValues(response.data || {});
+    } catch (error) {
+      console.error('Failed to load settings:', error);
+      toast.error('Failed to load settings');
     } finally {
       setLoading(false);
     }
   };
-  
-  const handleSettingChange = async (key: string, value: any) => {
-    // Update local state immediately
-    setSettings(prev => ({
-      ...prev,
-      [key]: value
-    }));
-    
-    // Save to server
+
+  const handleSave = async (newValues: Record<string, any>) => {
     try {
       setSaving(true);
-      await api.put(`/api/settings/${key}`, { value });
-    } catch (err) {
-      setError('Failed to save setting');
-      console.error('Settings save error:', err);
-      // Revert on error
-      await loadSettings();
+      
+      // Check which settings require restart
+      const changedKeys = Object.keys(newValues).filter(
+        key => JSON.stringify(newValues[key]) !== JSON.stringify(values[key])
+      );
+      
+      const requiresRestart = changedKeys.some(key => {
+        for (const category of appCategories) {
+          const setting = category.settings.find(s => s.key === key);
+          if (setting?.requiresRestart) return true;
+        }
+        return false;
+      });
+
+      await api.put('/api/settings', newValues);
+      setValues(newValues);
+      toast.success('Settings saved successfully');
+      
+      if (requiresRestart) {
+        setShowRestartBanner(true);
+      }
+    } catch (error) {
+      console.error('Failed to save settings:', error);
+      toast.error('Failed to save settings');
+      throw error;
     } finally {
       setSaving(false);
     }
   };
-  
-  const handleSaveAll = async () => {
+
+  const handleReset = () => {
+    loadSettings();
+  };
+
+  const handleRestart = async () => {
     try {
-      setSaving(true);
-      setError(null);
-      await api.put('/api/settings', settings);
-    } catch (err) {
-      setError('Failed to save settings');
-      console.error('Settings save error:', err);
-    } finally {
-      setSaving(false);
+      await api.post('/api/system/restart');
+      toast.success('Application restarting...');
+      setTimeout(() => window.location.reload(), 3000);
+    } catch (error) {
+      toast.error('Failed to restart application');
     }
   };
-  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -82,68 +254,18 @@ export function SettingsPage() {
       </div>
     );
   }
-  
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Application Settings
-          </h1>
-          <p className="text-gray-600">
-            Configure your application settings. Changes are saved automatically.
-          </p>
-        </div>
-        
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm text-red-800">{error}</p>
-              </div>
-              <div className="ml-auto pl-3">
-                <button
-                  onClick={() => setError(null)}
-                  className="text-red-400 hover:text-red-500"
-                >
-                  <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-        
-        <SettingsFramework
-          settings={settings}
-          definitions={definitions}
-          onSettingChange={handleSettingChange}
-          onSave={handleSaveAll}
-          loading={saving}
-        />
-        
-        <div className="mt-6 flex justify-end space-x-4">
-          <button
-            onClick={loadSettings}
-            className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
-          >
-            Reset
-          </button>
-          <button
-            onClick={handleSaveAll}
-            disabled={saving}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors"
-          >
-            {saving ? 'Saving...' : 'Save All'}
-          </button>
-        </div>
-      </div>
-    </div>
+    <FrameworkSettingsPage
+      categories={appCategories}
+      values={values}
+      loading={loading}
+      saving={saving}
+      onSave={handleSave}
+      onReset={handleReset}
+      onRestart={handleRestart}
+      showRestartBanner={showRestartBanner}
+      title="Application Settings"
+    />
   );
 }

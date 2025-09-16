@@ -21,9 +21,16 @@ import {
   healthCheck
 } from '@episensor/app-framework';
 import express from 'express';
-import { Server as SocketIOServer } from 'socket.io';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import settingsRouter, { settingsService } from './routes/settingsRouter.js';
 import { settingsMetadata } from './config/settings.js';
+
+// Get package.json for dynamic versioning
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const packageJson = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'));
 
 // Initialize logger with category
 const logger = createLogger('EpiApp');
@@ -38,7 +45,7 @@ async function main() {
   // Display EpiSensor startup banner
   displayStartupBanner({
     appName: 'EpiSensor App Template',
-    appVersion: '1.1.0',
+    appVersion: packageJson.version,
     port: 7500,
     additionalInfo: [
       '📊 Enhanced Settings Management',
@@ -66,15 +73,18 @@ async function main() {
   // Create and configure server
   const server = new StandardServer({
     appName: settings['app.name'] || 'EpiSensor App Template',
-    appVersion: '1.1.0',
+    appVersion: packageJson.version,
     description: settings['app.description'] || 'Professional application framework',
     port: settings['network.apiPort'] || 7500,
     webPort: settings['network.webPort'] || 7501,
     appId: 'com.episensor.app-template',
     enableWebSocket: settings['network.enableWebSocket'] !== false,
     
-    onInitialize: async (app: express.Application, io?: SocketIOServer) => {
+    onInitialize: async (app: express.Application, wsServer?: any) => {
       logger.info('Initializing application routes and middleware...');
+
+      // Get the actual Socket.IO server from the wrapper
+      const io = wsServer?.getIO ? wsServer.getIO() : wsServer;
       
       // API Routes
       app.use('/api/logs', logsRouter);
@@ -85,8 +95,8 @@ async function main() {
         res.json({
           success: true,
           data: {
-            appName: settings['app.name'] || 'EpiSensor App Template',
-            appVersion: '1.1.0',
+            appName: settings['app.name'] || packageJson.name || 'EpiSensor App Template',
+            appVersion: packageJson.version,
             apiUrl: `http://localhost:${settings['network.apiPort'] || 7500}`,
             websocketEnabled: settings['network.enableWebSocket'] !== false,
             environment: settings['advanced.environment'] || process.env.NODE_ENV || 'production'
@@ -116,7 +126,7 @@ async function main() {
           success: true,
           data: {
           name: settings['app.name'] || 'EpiSensor App Template',
-          version: '1.1.0',
+          version: packageJson.version,
           description: settings['app.description'],
           environment: settings['advanced.environment'] || process.env.NODE_ENV || 'production',
           platform: process.platform,
@@ -183,6 +193,16 @@ async function main() {
       // WebSocket event handlers
       if (io && settings['network.enableWebSocket'] !== false) {
         logger.info('Setting up WebSocket event handlers...');
+
+        if (!io || typeof io.on !== 'function') {
+          logger.error('Invalid WebSocket server instance', {
+            hasGetIO: !!wsServer?.getIO,
+            ioType: typeof io,
+            hasOn: io ? typeof io.on : 'no io'
+          });
+          throw new Error('WebSocket server not properly initialized');
+        }
+
         wsEventManager = new WebSocketEventManager(io);
         
         // Custom event handlers
@@ -245,7 +265,7 @@ async function main() {
           data: {
             message: 'Hello from EpiSensor App Template!',
             timestamp: new Date().toISOString(),
-            version: '1.1.0',
+            version: packageJson.version,
             theme: settings['app.theme'] || 'episensor'
           },
           message: 'Example endpoint'
@@ -302,7 +322,7 @@ async function main() {
     onStart: async () => {
       logger.info('🚀 Server started successfully');
       logger.info(`📡 API running on port ${settings['network.apiPort'] || 7500}`);
-      logger.info(`🌐 Web UI available on port ${settings['network.webPort'] || 7501}`);
+      logger.info(`🌐 Web UI available on port ${settings['network.webPort'] || 7502}`);
       logger.info(`🔌 WebSocket support: ${settings['network.enableWebSocket'] !== false ? 'Enabled' : 'Disabled'}`);
       
       // Log active features

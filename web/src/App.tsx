@@ -1,31 +1,65 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
-import { AppShell } from './components/AppShell';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { AppLayout, ConnectionOverlay, useSocketIO, useConnectionStatus } from '@episensor/app-framework/ui';
 import { Toaster } from 'sonner';
 import { Home, Settings, FileText } from 'lucide-react';
 import { HomePage } from './pages/HomePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { LogsPage } from './pages/LogsPage';
-import { SocketProvider } from './contexts/SocketContext';
-import { ConnectionLostOverlay } from './components/ConnectionLostOverlay';
 import { apiRequest } from './lib/api';
 
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [appInfo, setAppInfo] = useState({ name: 'App Template', version: '1.0.0' });
+  const [apiReady, setApiReady] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const { connected } = useConnectionStatus();
+  const [, socketActions] = useSocketIO();
+  const overlayTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (connected) {
+      setOverlayVisible(false);
+      if (overlayTimerRef.current) {
+        clearTimeout(overlayTimerRef.current);
+        overlayTimerRef.current = null;
+      }
+    } else if (!overlayVisible) {
+      if (overlayTimerRef.current) {
+        clearTimeout(overlayTimerRef.current);
+      }
+      overlayTimerRef.current = setTimeout(() => {
+        setOverlayVisible(true);
+        overlayTimerRef.current = null;
+      }, 2000);
+    }
+
+    return () => {
+      if (overlayTimerRef.current) {
+        clearTimeout(overlayTimerRef.current);
+        overlayTimerRef.current = null;
+      }
+    };
+  }, [connected, overlayVisible]);
 
   useEffect(() => {
     // Fetch app info from backend and set page title
     apiRequest('/api/config')
-      .then(info => {
-        setAppInfo(info);
-        document.title = info.name || 'App Template';
+      .then(response => {
+        const appData = {
+          name: response.appName || 'App Template',
+          version: response.appVersion || '1.0.0'
+        };
+        setAppInfo(appData);
+        document.title = appData.name;
+        setApiReady(true);
       })
       .catch(err => {
         console.error('Failed to fetch app info:', err);
         // Fallback to default
         document.title = 'App Template';
+        setApiReady(true);
       });
   }, []);
 
@@ -35,8 +69,13 @@ const AppContent: React.FC = () => {
     { name: 'Settings', href: '/settings', icon: <Settings className="h-4 w-4" /> },
   ];
 
+  const handleRetry = () => {
+    // Force reconnect by emitting a connect event
+    socketActions.emit('connect');
+  };
+
   return (
-    <AppShell
+    <AppLayout
       appName={appInfo.name}
       appVersion={appInfo.version}
       logoSrc="/assets/episensor-dark.svg"
@@ -44,8 +83,8 @@ const AppContent: React.FC = () => {
       currentPath={location.pathname}
       onNavigate={navigate}
       showConnectionStatus={true}
-      connectionStatusUrl={import.meta.env.VITE_API_URL || 'http://localhost:7500'}
       primaryColor="#E21350"
+      connectionStatusUrl={import.meta.env.VITE_API_URL || 'http://localhost:7500'}
       showLogout={false}
     >
       <Routes>
@@ -53,18 +92,20 @@ const AppContent: React.FC = () => {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/logs" element={<LogsPage />} />
       </Routes>
-    </AppShell>
+
+      <ConnectionOverlay
+        isConnected={!overlayVisible}
+        onRetry={handleRetry}
+      />
+    </AppLayout>
   );
 };
 
 export function App() {
   return (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <SocketProvider>
-        <AppContent />
-        <ConnectionLostOverlay />
-        <Toaster position="top-right" richColors />
-      </SocketProvider>
+      <AppContent />
+      <Toaster position="top-right" richColors />
     </BrowserRouter>
   );
 }

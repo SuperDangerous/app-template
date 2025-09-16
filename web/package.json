@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 8502",
-    "build": "cross-env VITE_API_URL=http://localhost:8080 vite build",
+    "dev": "vite --port 7501",
+    "build": "cross-env VITE_API_URL=http://localhost:7500 vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext ts,tsx",

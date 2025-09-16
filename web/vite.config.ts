@@ -9,18 +9,18 @@ console.log(`📦 Vite config: Using API port ${API_PORT}`);
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  
+
   // Path resolution
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
   },
-  
+
   // Development server configuration
   server: {
-    port: 5173,
-    strictPort: false,
+    port: 7501,
+    strictPort: true,
     cors: true,
     proxy: {
       '/api': {
