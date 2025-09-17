@@ -96,6 +96,11 @@ router.put('/:key', async (req, res) => {
   try {
     const { key } = req.params;
     const { value } = req.body;
+
+    if (value === undefined) {
+      apiResponse.error(res, 'Value is required', 400, { key });
+      return;
+    }
     
     await settingsService.set(key, value);
     

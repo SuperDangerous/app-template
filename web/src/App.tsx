@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { AppLayout, ConnectionOverlay, useSocketIO, useConnectionStatus } from '@episensor/app-framework/ui';
+import {
+  AppLayout,
+  ConnectionOverlay,
+  useSocketIO,
+  useConnectionStatus,
+} from '@episensor/app-framework/ui';
 import { Toaster } from 'sonner';
 import { Home, Settings, FileText } from 'lucide-react';
 import { HomePage } from './pages/HomePage';
@@ -46,18 +51,20 @@ const AppContent: React.FC = () => {
   useEffect(() => {
     // Fetch app info from backend and set page title
     apiRequest('/api/config')
-      .then(response => {
+      .then((response) => {
+        const payload = (response && typeof response === 'object' && 'data' in response)
+          ? (response as { data: Record<string, any> }).data
+          : response;
         const appData = {
-          name: response.appName || 'App Template',
-          version: response.appVersion || '1.0.0'
+          name: payload?.appName || 'App Template',
+          version: payload?.appVersion || '1.0.0',
         };
         setAppInfo(appData);
         document.title = appData.name;
         setApiReady(true);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Failed to fetch app info:', err);
-        // Fallback to default
         document.title = 'App Template';
         setApiReady(true);
       });

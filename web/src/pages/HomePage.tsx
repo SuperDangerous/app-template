@@ -27,14 +27,36 @@ export function HomePage() {
   useEffect(() => {
     // Fetch app info
     apiRequest('/api/config')
-      .then(setAppInfo)
-      .catch(console.error);
+      .then((response) => {
+        const payload = (response && typeof response === 'object' && 'data' in response)
+          ? (response as { data: Record<string, any> }).data
+          : response;
+        setAppInfo({
+          name: payload?.appName || 'EpiSensor App Template',
+          version: payload?.appVersion || '1.1.0',
+          description: payload?.description || 'Template application',
+        });
+      })
+      .catch((error) => {
+        console.error('Failed to load config:', error);
+      });
 
     // Fetch system stats
     const fetchStats = () => {
       apiRequest('/api/health')
-        .then(setStats)
-        .catch(console.error);
+        .then((response) => {
+          const payload = (response && typeof response === 'object' && 'data' in response)
+            ? (response as { data: Record<string, any> }).data
+            : response;
+          setStats({
+            uptime: Number(payload?.uptime) || 0,
+            memory: payload?.memory,
+            cpu: payload?.cpu,
+          });
+        })
+        .catch((error) => {
+          console.error('Failed to fetch health stats:', error);
+        });
     };
 
     fetchStats();

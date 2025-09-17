@@ -109,7 +109,7 @@ describe('Data Paths Utilities', () => {
   describe('getLogsPath', () => {
     it('should return logs directory path', () => {
       const logsPath = getLogsPath();
-      expect(logsPath).toBe(path.join(process.cwd(), 'logs'));
+      expect(logsPath).toBe(path.join(process.cwd(), 'data', 'logs'));
     });
 
     it('should create logs directory if it doesn\'t exist in desktop mode', async () => {

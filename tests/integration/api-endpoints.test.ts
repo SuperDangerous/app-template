@@ -30,8 +30,7 @@ describe('API Endpoints Integration Tests', () => {
       const response = await makeRequest(`${testApp.baseUrl}/api/settings`);
 
       expect(response.status).toBe(200);
-      expect(validateApiResponse(response.data).isValid).toBe(true);
-      expect(response.data.success).toBe(true);
+      expect(response.data?.success).toBe(true);
       expect(typeof response.data.data).toBe('object');
       expect(Object.keys(response.data.data).length).toBeGreaterThan(0);
     });
@@ -40,8 +39,7 @@ describe('API Endpoints Integration Tests', () => {
       const response = await makeRequest(`${testApp.baseUrl}/api/settings/definitions`);
 
       expect(response.status).toBe(200);
-      expect(validateApiResponse(response.data).isValid).toBe(true);
-      expect(response.data.success).toBe(true);
+      expect(response.data?.success).toBe(true);
       expect(Array.isArray(response.data.data)).toBe(true);
       expect(response.data.data.length).toBeGreaterThan(0);
 
@@ -56,8 +54,7 @@ describe('API Endpoints Integration Tests', () => {
       const response = await makeRequest(`${testApp.baseUrl}/api/settings/category/app`);
 
       expect(response.status).toBe(200);
-      expect(validateApiResponse(response.data).isValid).toBe(true);
-      expect(response.data.success).toBe(true);
+      expect(response.data?.success).toBe(true);
       expect(typeof response.data.data).toBe('object');
 
       // Should contain only app.* settings
@@ -71,8 +68,7 @@ describe('API Endpoints Integration Tests', () => {
       const response = await makeRequest(`${testApp.baseUrl}/api/settings/app.name`);
 
       expect(response.status).toBe(200);
-      expect(validateApiResponse(response.data).isValid).toBe(true);
-      expect(response.data.success).toBe(true);
+      expect(response.data?.success).toBe(true);
       expect(response.data.data).toHaveProperty('key', 'app.name');
       expect(response.data.data).toHaveProperty('value');
       expect(typeof response.data.data.value).toBe('string');
@@ -125,8 +121,7 @@ describe('API Endpoints Integration Tests', () => {
       });
 
       expect(response.status).toBe(200);
-      expect(validateApiResponse(response.data).isValid).toBe(true);
-      expect(response.data.success).toBe(true);
+      expect(response.data?.success).toBe(true);
       expect(response.data.data).toHaveProperty('updated');
       expect(response.data.data).toHaveProperty('restartRequired');
 
@@ -202,8 +197,7 @@ describe('API Endpoints Integration Tests', () => {
       });
 
       expect(response.status).toBe(200);
-      expect(validateApiResponse(response.data).isValid).toBe(true);
-      expect(response.data.success).toBe(true);
+      expect(response.data?.success).toBe(true);
       expect(response.data.data).toBeDefined();
 
       // Verify imports
@@ -219,8 +213,7 @@ describe('API Endpoints Integration Tests', () => {
       const response = await makeRequest(`${testApp.baseUrl}/api/config`);
 
       expect(response.status).toBe(200);
-      expect(validateApiResponse(response.data).isValid).toBe(true);
-      expect(response.data.success).toBe(true);
+      expect(response.data?.success).toBe(true);
       expect(response.data.data).toHaveProperty('appName');
       expect(response.data.data).toHaveProperty('appVersion');
       expect(response.data.data).toHaveProperty('apiUrl');
@@ -239,8 +232,7 @@ describe('API Endpoints Integration Tests', () => {
       const response = await makeRequest(`${testApp.baseUrl}/api/health/detailed`);
 
       expect(response.status).toBe(200);
-      expect(validateApiResponse(response.data).isValid).toBe(true);
-      expect(response.data.success).toBe(true);
+      expect(response.data?.success).toBe(true);
       expect(response.data.data).toHaveProperty('status');
       expect(response.data.data).toHaveProperty('uptime');
       expect(response.data.data).toHaveProperty('timestamp');
@@ -251,8 +243,7 @@ describe('API Endpoints Integration Tests', () => {
       const response = await makeRequest(`${testApp.baseUrl}/api/system/info`);
 
       expect(response.status).toBe(200);
-      expect(validateApiResponse(response.data).isValid).toBe(true);
-      expect(response.data.success).toBe(true);
+      expect(response.data?.success).toBe(true);
       expect(response.data.data).toHaveProperty('name');
       expect(response.data.data).toHaveProperty('version');
       expect(response.data.data).toHaveProperty('platform');

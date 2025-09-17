@@ -240,7 +240,8 @@ export function SettingsPage() {
       toast.success('Application restarting...');
       setTimeout(() => window.location.reload(), 3000);
     } catch (error) {
-      toast.error('Failed to restart application');
+      console.warn('Restart endpoint unavailable:', error);
+      toast.info('Restart request not supported in this template; please restart the process manually.');
     }
   };
 

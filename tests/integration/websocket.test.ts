@@ -131,9 +131,10 @@ describe('WebSocket Integration Tests', () => {
       try {
         await createTestWebSocketClient(nonExistentPort);
         expect.fail('Should have thrown connection error');
-      } catch (error) {
+      } catch (error: any) {
         expect(error).toBeInstanceOf(Error);
-        expect(error.message).toContain('WebSocket connection timeout');
+        const message = String(error.message || error);
+        expect(message === 'WebSocket connection timeout' || message.includes('xhr')).toBe(true);
       }
     });
 

@@ -7,9 +7,10 @@ import path from 'path';
 import fs from 'fs';
 import { getAppDataPath, getDataFilePath, isDesktopApp } from '@episensor/app-framework';
 
-// Configure these for your application
-const APP_ID = 'com.episensor.myapp';  // Update this
-const APP_NAME = 'myapp';              // Update this
+// Standard identifiers used by the template. Applications generated from this
+// template should customise these values in line with their own metadata.
+const APP_ID = 'com.episensor.app-template';
+const APP_NAME = 'app-template';
 
 /**
  * Get the appropriate path for application data
@@ -59,7 +60,7 @@ export function getLogsPath(): string {
     }
     return logsPath;
   }
-  return path.join(process.cwd(), 'logs');
+  return path.join(process.cwd(), 'data', 'logs');
 }
 
 /**

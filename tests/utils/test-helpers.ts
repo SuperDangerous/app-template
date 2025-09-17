@@ -6,8 +6,14 @@
 import { Server } from 'http';
 import { AddressInfo } from 'net';
 import express from 'express';
-import { StandardServer } from '@episensor/app-framework';
-import { settingsService } from '../../src/routes/settingsRouter.js';
+import {
+  StandardServer,
+  logsRouter,
+  WebSocketEventManager,
+  getStorageService,
+  healthCheck,
+} from '@episensor/app-framework';
+import settingsRouter, { settingsService } from '../../src/routes/settingsRouter.js';
 import { io as Client, Socket } from 'socket.io-client';
 
 export interface TestApp {
@@ -29,6 +35,11 @@ export async function createTestApp(): Promise<TestApp> {
   // Use a random port to avoid conflicts
   const testPort = Math.floor(Math.random() * 10000) + 20000;
 
+  const storageService = getStorageService();
+  await storageService.initialize();
+
+  const settings = await settingsService.getAll();
+
   const server = new StandardServer({
     appName: 'Test App',
     appVersion: '1.0.0',
@@ -38,8 +49,148 @@ export async function createTestApp(): Promise<TestApp> {
     appId: 'com.episensor.test',
     enableWebSocket: true,
 
-    onInitialize: async (app: express.Application) => {
-      // Add minimal test routes
+    onInitialize: async (app: express.Application, wsServer?: any) => {
+      app.use('/api/logs', logsRouter);
+      app.use('/api/settings', settingsRouter);
+      app.get('/api/health', healthCheck);
+
+      app.get('/api/config', (_req, res) => {
+        res.json({
+          success: true,
+          data: {
+            appName: settings['app.name'] || 'Test App',
+            appVersion: '1.0.0',
+            apiUrl: `http://localhost:${testPort}`,
+            websocketEnabled: settings['network.enableWebSocket'] !== false,
+            environment: process.env.NODE_ENV || 'test',
+          },
+          message: 'Application configuration',
+        });
+      });
+
+      app.get('/api/system/info', (_req, res) => {
+        res.json({
+          success: true,
+          data: {
+            name: settings['app.name'] || 'Test App',
+            version: '1.0.0',
+            description: settings['app.description'] || 'Test instance',
+            environment: process.env.NODE_ENV || 'test',
+            platform: process.platform,
+            nodeVersion: process.version,
+            uptime: process.uptime(),
+            features: {
+              settings: true,
+              logging: true,
+              websocket: settings['network.enableWebSocket'] !== false,
+              monitoring: settings['advanced.performanceMonitoring'] !== false,
+              telemetry: settings['advanced.telemetry'] === true,
+              experimental: settings['advanced.experimental'] === true,
+              authentication: settings['security.enableAuth'] === true,
+              https: settings['security.enableHttps'] === true,
+              rateLimit: settings['security.rateLimit'] !== false,
+              backup: settings['storage.enableBackup'] !== false,
+              debugMode: settings['advanced.debugMode'] === true,
+            },
+          },
+          message: 'System information',
+        });
+      });
+
+      app.get('/api/system/metrics', (_req, res) => {
+        res.json({
+          success: true,
+          data: {
+            memory: process.memoryUsage(),
+            cpu: process.cpuUsage(),
+            uptime: process.uptime(),
+          },
+          message: 'System metrics retrieved',
+        });
+      });
+
+      app.get('/api/storage/info', async (_req, res) => {
+        const files = await storageService.listFiles('data');
+        const directoriesRaw = storageService.getBaseDirectories();
+        const directories = Array.isArray(directoriesRaw)
+          ? directoriesRaw
+          : Object.values(directoriesRaw ?? {});
+        res.json({
+          success: true,
+          data: {
+            directories,
+            fileCount: files.length,
+            totalSize: files.reduce((total, file) => total + (file.size || 0), 0),
+          },
+          message: 'Storage information',
+        });
+      });
+
+      app.get('/api/health/detailed', (_req, res) => {
+        res.json({
+          success: true,
+          data: {
+            status: 'healthy',
+            uptime: process.uptime(),
+            timestamp: new Date().toISOString(),
+          },
+          message: 'Detailed system status',
+        });
+      });
+
+      app.get('/api/example', (_req, res) => {
+        res.json({
+          success: true,
+          data: {
+            message: 'Hello from test app',
+            timestamp: new Date().toISOString(),
+            version: '1.0.0',
+          },
+          message: 'Example endpoint',
+        });
+      });
+
+      app.get('/api/demo/data', (_req, res) => {
+        res.json({
+          success: true,
+          data: {
+            users: [
+              { id: 1, name: 'Jane Doe', role: 'Admin', status: 'active' },
+            ],
+            stats: {
+              totalUsers: 1,
+              activeUsers: 1,
+              totalSessions: 10,
+              avgSessionDuration: 1200,
+            },
+            recentActivity: [],
+          },
+          message: 'Demo data retrieved',
+        });
+      });
+
+      app.get('/api/features', (_req, res) => {
+        const features = {
+          settings: true,
+          logging: true,
+          websocket: settings['network.enableWebSocket'] !== false,
+          monitoring: settings['advanced.performanceMonitoring'] !== false,
+          telemetry: settings['advanced.telemetry'] === true,
+          experimental: settings['advanced.experimental'] === true,
+          authentication: settings['security.enableAuth'] === true,
+          https: settings['security.enableHttps'] === true,
+          rateLimit: settings['security.rateLimit'] !== false,
+          backup: settings['storage.enableBackup'] !== false,
+          debugMode: settings['advanced.debugMode'] === true,
+        };
+
+        res.json({
+          success: true,
+          data: features,
+          message: 'Feature flags',
+        });
+      });
+
       app.get('/test', (_req, res) => {
         res.json({ message: 'test endpoint working' });
       });
@@ -47,6 +198,32 @@ export async function createTestApp(): Promise<TestApp> {
       app.get('/health', (_req, res) => {
         res.json({ status: 'healthy' });
       });
+
+      const io = wsServer?.getIO ? wsServer.getIO() : wsServer;
+      if (io) {
+        const wsManager = new WebSocketEventManager(io);
+
+        wsManager.on('ping', (socket, data) => {
+          socket.emit('pong', {
+            timestamp: Date.now(),
+            echo: data,
+          });
+        });
+
+        wsManager.on('subscribe', (socket, data) => {
+          const channel = data?.channel;
+          if (channel) {
+            socket.join(channel);
+          }
+        });
+
+        wsManager.on('unsubscribe', (socket, data) => {
+          const channel = data?.channel;
+          if (channel) {
+            socket.leave(channel);
+          }
+        });
+      }
     }
   });
 

@@ -4,8 +4,6 @@ import path from 'path';
 
 const API_PORT = process.env.VITE_API_URL?.split(':')[2] || '7500';
 
-console.log(`📦 Vite config: Using API port ${API_PORT}`);
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],

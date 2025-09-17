@@ -11,14 +11,13 @@
  * - Secure file storage
  */
 
-import { 
-  StandardServer, 
-  createLogger, 
+import {
+  StandardServer,
+  createLogger,
   logsRouter,
-  displayStartupBanner,
   WebSocketEventManager,
   getStorageService,
-  healthCheck
+  healthCheck,
 } from '@episensor/app-framework';
 import express from 'express';
 import { readFileSync } from 'fs';
@@ -42,21 +41,6 @@ const storageService = getStorageService();
 let wsEventManager: WebSocketEventManager | null = null;
 
 async function main() {
-  // Display EpiSensor startup banner
-  displayStartupBanner({
-    appName: 'EpiSensor App Template',
-    appVersion: packageJson.version,
-    port: 7500,
-    additionalInfo: [
-      '📊 Enhanced Settings Management',
-      '📝 Advanced Logging System',
-      '🔌 WebSocket Real-time Support',
-      '🛡️ Security & Authentication Ready',
-      '💾 Secure Storage Service',
-      '🎨 EpiSensor Professional Branding'
-    ]
-  });
-
   // Initialize settings service
   logger.info('Initializing settings service...');
   const settings = await settingsService.getAll();
@@ -322,7 +306,7 @@ async function main() {
     onStart: async () => {
       logger.info('🚀 Server started successfully');
       logger.info(`📡 API running on port ${settings['network.apiPort'] || 7500}`);
-      logger.info(`🌐 Web UI available on port ${settings['network.webPort'] || 7502}`);
+      logger.info(`🌐 Web UI available on port ${settings['network.webPort'] || 7501}`);
       logger.info(`🔌 WebSocket support: ${settings['network.enableWebSocket'] !== false ? 'Enabled' : 'Disabled'}`);
       
       // Log active features
