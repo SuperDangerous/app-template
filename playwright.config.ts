@@ -30,7 +30,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:8502',
+    baseURL: 'http://localhost:7501',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -93,20 +93,12 @@ export default defineConfig({
   globalTeardown: './tests/e2e/global-teardown.ts',
 
   /* Run your local dev server before starting the tests */
-  webServer: [
-    {
-      command: 'npm run dev',
-      url: 'http://localhost:8500/health',
-      reuseExistingServer: !process.env.CI,
-      timeout: 30000,
-    },
-    {
-      command: 'cd web && npm run dev',
-      url: 'http://localhost:8502',
-      reuseExistingServer: !process.env.CI,
-      timeout: 30000,
-    }
-  ],
+  webServer: {
+    command: 'npm run dev',
+    url: 'http://localhost:7501',
+    reuseExistingServer: !process.env.CI,
+    timeout: 30000,
+  },
 
   /* Test timeout */
   timeout: 30000,
@@ -115,6 +107,9 @@ export default defineConfig({
   expect: {
     timeout: 10000,
   },
+
+  /* Limit concurrency to reduce resource usage */
+  workers: 1,
 
   /* Output directory */
   outputDir: 'test-results/',

@@ -4,6 +4,7 @@
  */
 
 import { test, expect, Page } from '@playwright/test';
+import { WS_URL } from './constants';
 
 interface ConsoleMessage {
   type: string;
@@ -199,7 +200,7 @@ test.describe('Console Error Detection Tests', () => {
     await page.evaluate(() => {
       return new Promise<void>((resolve) => {
         try {
-          const ws = new WebSocket('ws://localhost:8500/socket.io/?EIO=4&transport=websocket');
+          const ws = new WebSocket(`${WS_URL}/socket.io/?EIO=4&transport=websocket`);
 
           ws.onopen = () => {
             ws.close();

@@ -4,6 +4,7 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { BACKEND_URL, BACKEND_PORT, WS_URL } from './constants';
 
 test.describe('Frontend-Backend Integration Tests', () => {
   test('should load application configuration from backend', async ({ page }) => {
@@ -11,9 +12,9 @@ test.describe('Frontend-Backend Integration Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // Check if frontend can fetch and use backend configuration
-    const configData = await page.evaluate(async () => {
+    const configData = await page.evaluate(async (apiBase) => {
       try {
-        const response = await fetch('http://localhost:8500/api/config');
+        const response = await fetch(`${apiBase}/api/config`);
         const data = await response.json();
         return {
           success: response.ok,
@@ -23,13 +24,13 @@ test.describe('Frontend-Backend Integration Tests', () => {
       } catch (error) {
         return { success: false, error: error.message };
       }
-    });
+    }, BACKEND_URL);
 
     expect(configData.success).toBe(true);
     expect(configData.status).toBe(200);
     expect(configData.data.success).toBe(true);
     expect(configData.data.data.appName).toBeTruthy();
-    expect(configData.data.data.apiUrl).toContain('8500');
+    expect(configData.data.data.apiUrl).toContain(BACKEND_PORT);
   });
 
   test('should handle settings API integration', async ({ page }) => {
@@ -37,9 +38,9 @@ test.describe('Frontend-Backend Integration Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // Test settings retrieval
-    const settingsData = await page.evaluate(async () => {
+    const settingsData = await page.evaluate(async (apiBase) => {
       try {
-        const response = await fetch('http://localhost:8500/api/settings');
+        const response = await fetch(`${apiBase}/api/settings`);
         const data = await response.json();
         return {
           success: response.ok,
@@ -49,7 +50,7 @@ test.describe('Frontend-Backend Integration Tests', () => {
       } catch (error) {
         return { success: false, error: error.message };
       }
-    });
+    }, BACKEND_URL);
 
     expect(settingsData.success).toBe(true);
     expect(settingsData.data.success).toBe(true);
@@ -61,9 +62,9 @@ test.describe('Frontend-Backend Integration Tests', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    const definitionsData = await page.evaluate(async () => {
+    const definitionsData = await page.evaluate(async (apiBase) => {
       try {
-        const response = await fetch('http://localhost:8500/api/settings/definitions');
+        const response = await fetch(`${apiBase}/api/settings/definitions`);
         const data = await response.json();
         return {
           success: response.ok,
@@ -73,7 +74,7 @@ test.describe('Frontend-Backend Integration Tests', () => {
       } catch (error) {
         return { success: false, error: error.message };
       }
-    });
+    }, BACKEND_URL);
 
     expect(definitionsData.success).toBe(true);
     expect(definitionsData.data.success).toBe(true);
@@ -85,9 +86,9 @@ test.describe('Frontend-Backend Integration Tests', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    const featuresData = await page.evaluate(async () => {
+    const featuresData = await page.evaluate(async (apiBase) => {
       try {
-        const response = await fetch('http://localhost:8500/api/features');
+        const response = await fetch(`${apiBase}/api/features`);
         const data = await response.json();
         return {
           success: response.ok,
@@ -97,7 +98,7 @@ test.describe('Frontend-Backend Integration Tests', () => {
       } catch (error) {
         return { success: false, error: error.message };
       }
-    });
+    }, BACKEND_URL);
 
     expect(featuresData.success).toBe(true);
     expect(featuresData.data.success).toBe(true);
@@ -111,9 +112,9 @@ test.describe('Frontend-Backend Integration Tests', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    const systemData = await page.evaluate(async () => {
+    const systemData = await page.evaluate(async (apiBase) => {
       try {
-        const response = await fetch('http://localhost:8500/api/system/info');
+        const response = await fetch(`${apiBase}/api/system/info`);
         const data = await response.json();
         return {
           success: response.ok,
@@ -123,7 +124,7 @@ test.describe('Frontend-Backend Integration Tests', () => {
       } catch (error) {
         return { success: false, error: error.message };
       }
-    });
+    }, BACKEND_URL);
 
     expect(systemData.success).toBe(true);
     expect(systemData.data.success).toBe(true);
@@ -137,9 +138,9 @@ test.describe('Frontend-Backend Integration Tests', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    const demoData = await page.evaluate(async () => {
+    const demoData = await page.evaluate(async (apiBase) => {
       try {
-        const response = await fetch('http://localhost:8500/api/demo/data');
+        const response = await fetch(`${apiBase}/api/demo/data`);
         const data = await response.json();
         return {
           success: response.ok,
@@ -149,7 +150,7 @@ test.describe('Frontend-Backend Integration Tests', () => {
       } catch (error) {
         return { success: false, error: error.message };
       }
-    });
+    }, BACKEND_URL);
 
     expect(demoData.success).toBe(true);
     expect(demoData.data.success).toBe(true);
@@ -166,12 +167,12 @@ test.describe('Real-time Communication Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // Test WebSocket connection with Socket.IO
-    const wsResult = await page.evaluate(() => {
+    const wsResult = await page.evaluate((wsBase) => {
       return new Promise((resolve) => {
         // Import Socket.IO client from global or create connection
         try {
           // This would depend on how Socket.IO is implemented in the frontend
-          const socket = new WebSocket('ws://localhost:8500/socket.io/?EIO=4&transport=websocket');
+          const socket = new WebSocket(`${wsBase}/socket.io/?EIO=4&transport=websocket`);
 
           const result = {
             connected: false,
@@ -216,7 +217,7 @@ test.describe('Real-time Communication Tests', () => {
           });
         }
       });
-    });
+    }, WS_URL);
 
     expect(wsResult.error).toBeNull();
     // Connection should be attempted even if specific events aren't received
@@ -250,9 +251,9 @@ test.describe('API Error Handling Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // Test with a non-existent endpoint
-    const errorHandling = await page.evaluate(async () => {
+    const errorHandling = await page.evaluate(async (apiBase) => {
       try {
-        const response = await fetch('http://localhost:8500/api/non-existent');
+        const response = await fetch(`${apiBase}/api/non-existent`);
         return {
           status: response.status,
           ok: response.ok,
@@ -264,7 +265,7 @@ test.describe('API Error Handling Tests', () => {
           handled: true
         };
       }
-    });
+    }, BACKEND_URL);
 
     // Either it should return 404 or handle the error gracefully
     expect(errorHandling.handled).toBe(true);
@@ -278,10 +279,10 @@ test.describe('API Error Handling Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // The frontend should be able to handle various response formats
-    const responseHandling = await page.evaluate(async () => {
+    const responseHandling = await page.evaluate(async (apiBase) => {
       try {
         // Test with a known endpoint that should return valid JSON
-        const response = await fetch('http://localhost:8500/api/config');
+        const response = await fetch(`${apiBase}/api/config`);
         const text = await response.text();
 
         // Try to parse as JSON
@@ -298,7 +299,7 @@ test.describe('API Error Handling Tests', () => {
           error: error.message
         };
       }
-    });
+    }, BACKEND_URL);
 
     expect(responseHandling.success).toBe(true);
     expect(responseHandling.isValidJson).toBe(true);
@@ -309,12 +310,12 @@ test.describe('API Error Handling Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // Test timeout handling
-    const timeoutTest = await page.evaluate(async () => {
+    const timeoutTest = await page.evaluate(async (apiBase) => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 100); // Very short timeout
 
       try {
-        const response = await fetch('http://localhost:8500/api/settings', {
+        const response = await fetch(`${apiBase}/api/settings`, {
           signal: controller.signal
         });
 
@@ -341,16 +342,16 @@ test.describe('State Management Integration Tests', () => {
 
     // This test would depend on the frontend state management implementation
     // For now, we'll test that the page maintains basic functionality
-    const stateTest = await page.evaluate(async () => {
+    const stateTest = await page.evaluate(async (apiBase) => {
       // Fetch initial config
-      const config1 = await fetch('http://localhost:8500/api/config');
+      const config1 = await fetch(`${apiBase}/api/config`);
       const configData1 = await config1.json();
 
       // Wait a bit
       await new Promise(resolve => setTimeout(resolve, 100));
 
       // Fetch config again
-      const config2 = await fetch('http://localhost:8500/api/config');
+      const config2 = await fetch(`${apiBase}/api/config`);
       const configData2 = await config2.json();
 
       return {
@@ -358,7 +359,7 @@ test.describe('State Management Integration Tests', () => {
         secondCall: configData2.success,
         consistent: JSON.stringify(configData1.data) === JSON.stringify(configData2.data)
       };
-    });
+    }, BACKEND_URL);
 
     expect(stateTest.firstCall).toBe(true);
     expect(stateTest.secondCall).toBe(true);
@@ -369,10 +370,10 @@ test.describe('State Management Integration Tests', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    const settingsUpdateTest = await page.evaluate(async () => {
+    const settingsUpdateTest = await page.evaluate(async (apiBase) => {
       try {
         // Get current settings
-        const currentResponse = await fetch('http://localhost:8500/api/settings');
+        const currentResponse = await fetch(`${apiBase}/api/settings`);
         const currentData = await currentResponse.json();
 
         if (!currentData.success) {
@@ -380,7 +381,7 @@ test.describe('State Management Integration Tests', () => {
         }
 
         // Try to update a safe setting
-        const updateResponse = await fetch('http://localhost:8500/api/settings/app.name', {
+        const updateResponse = await fetch(`${apiBase}/api/settings/app.name`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ value: 'Test Updated Name' })
@@ -389,7 +390,7 @@ test.describe('State Management Integration Tests', () => {
         const updateData = await updateResponse.json();
 
         // Reset the setting back
-        await fetch('http://localhost:8500/api/settings/app.name', {
+        await fetch(`${apiBase}/api/settings/app.name`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ value: currentData.data['app.name'] })
@@ -402,7 +403,7 @@ test.describe('State Management Integration Tests', () => {
       } catch (error) {
         return { success: false, error: error.message };
       }
-    });
+    }, BACKEND_URL);
 
     // Settings update should work or be gracefully handled
     if (settingsUpdateTest.status) {

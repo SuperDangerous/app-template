@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { FRONTEND_URL } from './constants';
 
 test.describe('Console Error Check', () => {
   test('app should start without console errors', async ({ page }) => {
@@ -17,7 +18,7 @@ test.describe('Console Error Check', () => {
     });
     
     // Navigate to app
-    await page.goto('http://localhost:7501');
+    await page.goto(FRONTEND_URL);
     
     // Wait for app to fully load
     await page.waitForLoadState('networkidle');
@@ -49,12 +50,12 @@ test.describe('Console Error Check', () => {
       }
     });
     
-    await page.goto('http://localhost:7501/settings');
+    await page.goto(`${FRONTEND_URL}/settings`);
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
     
-    // Check if settings page loaded
-    await expect(page.locator('h1')).toContainText('Settings');
+    // Check if settings page loaded - use more specific locator
+    await expect(page.locator('h1').filter({ hasText: 'Application Settings' })).toBeVisible();
     
     if (consoleErrors.length > 0) {
       console.log('Settings page console errors:');
@@ -77,12 +78,12 @@ test.describe('Console Error Check', () => {
       }
     });
     
-    await page.goto('http://localhost:7501/logs');
+    await page.goto(`${FRONTEND_URL}/logs`);
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(2000);
     
-    // Check if logs page loaded
-    await expect(page.locator('h1')).toContainText('Logs');
+    // Check if logs page loaded - use more specific locator
+    await expect(page.locator('h1').filter({ hasText: 'Application Logs' })).toBeVisible();
     
     if (consoleErrors.length > 0) {
       console.log('Logs page console errors:');

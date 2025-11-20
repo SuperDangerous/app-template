@@ -4,6 +4,7 @@
  */
 
 import { chromium, FullConfig } from '@playwright/test';
+import { BACKEND_URL, FRONTEND_URL } from './constants';
 
 async function globalSetup(config: FullConfig) {
   const { baseURL } = config.projects[0].use;
@@ -16,14 +17,14 @@ async function globalSetup(config: FullConfig) {
     console.log('🔧 Setting up E2E test environment...');
 
     // Wait for backend to be ready
-    const backendUrl = 'http://localhost:8500';
+    const backendUrl = BACKEND_URL;
     let backendReady = false;
     let attempts = 0;
     const maxAttempts = 30;
 
     while (!backendReady && attempts < maxAttempts) {
       try {
-        const response = await page.request.get(`${backendUrl}/health`);
+        const response = await page.request.get(`${backendUrl}/api/health`);
         if (response.ok()) {
           backendReady = true;
           console.log('✅ Backend is ready');
@@ -45,7 +46,7 @@ async function globalSetup(config: FullConfig) {
 
     while (!frontendReady && attempts < maxAttempts) {
       try {
-        const response = await page.request.get(baseURL || 'http://localhost:8502');
+        const response = await page.request.get(baseURL || FRONTEND_URL);
         if (response.ok()) {
           frontendReady = true;
           console.log('✅ Frontend is ready');

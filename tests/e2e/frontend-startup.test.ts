@@ -3,13 +3,14 @@
  */
 
 import { test, expect, Page } from '@playwright/test';
+import { FRONTEND_PORT, BACKEND_PORT, BACKEND_URL, WS_URL } from './constants';
 
 test.describe('Frontend Startup Tests', () => {
-  test('should load the frontend on correct port (8502)', async ({ page }) => {
+  test('should load the frontend on correct port', async ({ page }) => {
     await page.goto('/');
 
     // Verify we're on the correct port
-    expect(page.url()).toContain('localhost:8502');
+    expect(page.url()).toContain(`localhost:${FRONTEND_PORT}`);
 
     // Page should load without errors
     await expect(page).toHaveTitle(/EpiSensor/i);
@@ -37,16 +38,16 @@ test.describe('Frontend Startup Tests', () => {
     expect(errors).toHaveLength(0);
   });
 
-  test('should connect to backend API on correct port (8500)', async ({ page }) => {
+  test('should connect to backend API on correct port', async ({ page }) => {
     await page.goto('/');
 
     // Wait for any initial API calls to complete
     await page.waitForLoadState('networkidle');
 
     // Check if the page can communicate with the backend
-    const response = await page.evaluate(async () => {
+    const response = await page.evaluate(async (apiBase) => {
       try {
-        const res = await fetch('http://localhost:8500/api/config');
+        const res = await fetch(`${apiBase}/api/config`);
         return {
           status: res.status,
           ok: res.ok,
@@ -55,7 +56,7 @@ test.describe('Frontend Startup Tests', () => {
       } catch (error) {
         return { error: error.message };
       }
-    });
+    }, BACKEND_URL);
 
     expect(response.ok).toBe(true);
     expect(response.status).toBe(200);
@@ -63,17 +64,17 @@ test.describe('Frontend Startup Tests', () => {
     expect(response.data.success).toBe(true);
   });
 
-  test('should establish WebSocket connection on backend port (8500)', async ({ page }) => {
+  test('should establish WebSocket connection on backend port', async ({ page }) => {
     await page.goto('/');
 
     // Wait for page to load
     await page.waitForLoadState('networkidle');
 
     // Test WebSocket connection
-    const wsConnected = await page.evaluate(() => {
+    const wsConnected = await page.evaluate((wsBase) => {
       return new Promise((resolve) => {
         try {
-          const socket = new WebSocket('ws://localhost:8500/socket.io/?EIO=4&transport=websocket');
+          const socket = new WebSocket(`${wsBase}/socket.io/?EIO=4&transport=websocket`);
 
           socket.onopen = () => {
             socket.close();
@@ -93,7 +94,7 @@ test.describe('Frontend Startup Tests', () => {
           resolve(false);
         }
       });
-    });
+    }, WS_URL);
 
     expect(wsConnected).toBe(true);
   });
@@ -158,20 +159,20 @@ test.describe('API Connectivity Tests', () => {
   test('should successfully fetch application config', async ({ page }) => {
     await page.goto('/');
 
-    const configResponse = await page.request.get('http://localhost:8500/api/config');
+    const configResponse = await page.request.get(`${BACKEND_URL}/api/config`);
     expect(configResponse.ok()).toBe(true);
 
     const config = await configResponse.json();
     expect(config.success).toBe(true);
     expect(config.data).toBeDefined();
     expect(config.data.appName).toBeTruthy();
-    expect(config.data.apiUrl).toContain('8500');
+    expect(config.data.apiUrl).toContain(BACKEND_PORT);
   });
 
   test('should successfully fetch feature flags', async ({ page }) => {
     await page.goto('/');
 
-    const featuresResponse = await page.request.get('http://localhost:8500/api/features');
+    const featuresResponse = await page.request.get(`${BACKEND_URL}/api/features`);
     expect(featuresResponse.ok()).toBe(true);
 
     const features = await featuresResponse.json();
@@ -184,7 +185,7 @@ test.describe('API Connectivity Tests', () => {
   test('should successfully fetch health status', async ({ page }) => {
     await page.goto('/');
 
-    const healthResponse = await page.request.get('http://localhost:8500/api/health');
+    const healthResponse = await page.request.get(`${BACKEND_URL}/api/health`);
     expect(healthResponse.ok()).toBe(true);
 
     // Health endpoint might return different format

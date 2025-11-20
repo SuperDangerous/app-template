@@ -4,6 +4,16 @@ export default defineConfig({
   test: {
     environment: 'node',
     testTimeout: 10000,
+
+    // Limit parallel execution to reduce memory usage
+    maxConcurrency: 1,
+    maxWorkers: 1,
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true
+      }
+    },
     include: [
       '**/tests/**/*.test.ts',
       '**/__tests__/**/*.test.ts',
