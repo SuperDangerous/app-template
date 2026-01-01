@@ -116,7 +116,7 @@ async function main() {
           platform: process.platform,
           nodeVersion: process.version,
           uptime: process.uptime(),
-          isDesktopApp: process.env.TAURI === '1',
+          isDesktopApp: process.env.ELECTRON_RUNNING === 'true',
           features: {
             websocket: settings['network.enableWebSocket'] !== false,
             authentication: settings['security.enableAuth'] === true,

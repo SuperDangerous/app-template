@@ -20,19 +20,17 @@ pnpm-lock.yaml
 # Build outputs
 dist/
 dist-ssr/
-build/
 out/
 *.local
 
-# Tauri
-src-tauri/target/
-src-tauri/WixTools/
-src-tauri/.cargo/
-# Keep the Cargo.lock for Tauri projects
-# src-tauri/Cargo.lock
+# Electron build output
+build/*/
+!build/entitlements.mac.plist
+!build/entitlements.mas.plist
+!build/icon.*
+!build/dmg-background.png
 
-# Tauri binaries - IMPORTANT
-src-tauri/binaries/
+# Electron packaged apps
 *.dmg
 *.exe
 *.msi

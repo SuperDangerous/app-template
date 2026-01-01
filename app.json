@@ -1,11 +1,11 @@
 {
   "name": "EpiSensor App Template",
   "version": "1.0.0",
-  "description": "Template for EpiSensor Tauri desktop applications",
+  "description": "Template for EpiSensor Electron desktop applications",
   "ports": {
-    "api": 8080,
-    "web": 5173,
-    "websocket": 8080
+    "api": 7500,
+    "web": 7501,
+    "websocket": 7500
   },
   "development": {
     "autoStart": true,
@@ -30,7 +30,7 @@
   "security": {
     "cors": {
       "enabled": true,
-      "origins": ["http://localhost:5173", "tauri://localhost"]
+      "origins": ["http://localhost:7501", "file://"]
     }
   }
 }

@@ -16,7 +16,7 @@ export const defaultSettings = {
   'network.apiPort': 7500,
   'network.webPort': 7501,
   'network.enableWebSocket': true,
-  'network.corsOrigins': 'http://localhost:*,tauri://localhost',
+  'network.corsOrigins': 'http://localhost:*,file://',
   'network.maxConnections': 100,
   'network.timeout': 30000,
   
