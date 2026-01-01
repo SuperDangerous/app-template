@@ -38,7 +38,7 @@
     "setup": "npm install && cd web && npm install"
   },
   "dependencies": {
-    "@episensor/app-framework": "file:../epi-app-framework/episensor-app-framework-4.9.0.tgz",
+    "@episensor/app-framework": "^4.8.0",
     "boxen": "^8.0.1",
     "concurrently": "^9.1.0",
     "cors": "^2.8.5",
