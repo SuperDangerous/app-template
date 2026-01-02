@@ -1,5 +1,5 @@
 // Import cn from the framework instead of non-existent ui-stubs
-export { cn } from '@episensor/app-framework/ui';
+export { cn } from '@superdangerous/app-framework/ui';
 
 export function formatBytes(bytes: number): string {
   if (bytes === 0) return '0 B';

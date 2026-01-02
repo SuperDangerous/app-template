@@ -1,4 +1,4 @@
-# EpiSensor Application Standardization Matrix - Verified Edition
+# SuperDangerous Application Standardization Matrix - Verified Edition
 
 > **Last Updated:** January 2025  
 > **Version:** 2.0 - Comprehensive Verification  
@@ -29,7 +29,7 @@ After comprehensive verification of all 6 applications:
 ### Key Findings
 
 #### ✅ Well Standardized Areas
-1. **Framework Adoption** - All apps use @episensor/app-framework v4.3.2
+1. **Framework Adoption** - All apps use @superdangerous/app-framework v4.3.2
 2. **Build Process** - Consistent TypeScript compilation to dist/
 3. **Desktop Integration** - Uniform Tauri configuration
 4. **Development Scripts** - All use dev-server command
@@ -38,7 +38,7 @@ After comprehensive verification of all 6 applications:
 #### ❌ Critical Standardization Gaps
 1. **Test Framework Split** - 50/50 split between Jest and Vitest
 2. **Configuration Management** - Only 2/6 apps use proper ConfigManager
-3. **Package Naming** - 2/6 apps missing @episensor scope
+3. **Package Naming** - 2/6 apps missing @superdangerous scope
 4. **Security Implementation** - Inconsistent authentication/authorization
 5. **Error Handling** - No standardized error response format
 6. **API Documentation** - 0/6 apps have OpenAPI specs
@@ -92,7 +92,7 @@ Each app excels in different areas:
    - Timeline: 1 week
 
 3. **Standardize Package Names**
-   - Rename to @episensor/* scope
+   - Rename to @superdangerous/* scope
    - Update all imports
    - Timeline: 2 days
 
@@ -132,13 +132,13 @@ Each app excels in different areas:
 
 ## Framework Enhancements Required
 
-The following should be added to @episensor/app-framework:
+The following should be added to @superdangerous/app-framework:
 
 1. **Shared Configuration Schemas** - Zod schemas for validation
 2. **Error Handler Middleware** - Standardized error responses
 3. **API Documentation Generator** - OpenAPI integration
 4. **Test Utilities** - Common mocks and helpers
-5. **ESLint Config Package** - @episensor/eslint-config
+5. **ESLint Config Package** - @superdangerous/eslint-config
 6. **Docker Templates** - Standard Dockerfile and compose
 7. **Metrics Collection** - Built-in observability
 8. **Security Middleware** - Authentication/authorization helpers

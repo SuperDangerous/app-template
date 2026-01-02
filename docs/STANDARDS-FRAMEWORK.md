@@ -1,6 +1,6 @@
 # Framework Enhancement Requirements
 
-> **Purpose:** Define exact enhancements needed in @episensor/app-framework to achieve standardization goals
+> **Purpose:** Define exact enhancements needed in @superdangerous/app-framework to achieve standardization goals
 
 ## Priority 1: Essential Framework Additions
 
@@ -10,7 +10,7 @@
 
 **Required Enhancement:**
 ```typescript
-// @episensor/app-framework/src/config/ConfigService.ts
+// @superdangerous/app-framework/src/config/ConfigService.ts
 import { z } from 'zod';
 import fs from 'fs-extra';
 import chokidar from 'chokidar';
@@ -110,7 +110,7 @@ export class ConfigService<T> extends EventEmitter {
 
 **Required Enhancement:**
 ```typescript
-// @episensor/app-framework/src/middleware/ErrorHandler.ts
+// @superdangerous/app-framework/src/middleware/ErrorHandler.ts
 import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 
@@ -227,7 +227,7 @@ export function createErrorHandler(options: ErrorOptions = {}) {
 
 **Required Enhancement:**
 ```typescript
-// @episensor/app-framework/src/docs/OpenAPIGenerator.ts
+// @superdangerous/app-framework/src/docs/OpenAPIGenerator.ts
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
 import swaggerUi from 'swagger-ui-express';
@@ -336,7 +336,7 @@ export function ApiEndpoint(config: any) {
 
 **Required Enhancement:**
 ```typescript
-// @episensor/app-framework/src/auth/AuthMiddleware.ts
+// @superdangerous/app-framework/src/auth/AuthMiddleware.ts
 import { Request, Response, NextFunction } from 'express';
 import basicAuth from 'express-basic-auth';
 import session from 'express-session';
@@ -437,7 +437,7 @@ export class AuthenticationService {
 
 **Required Enhancement:**
 ```typescript
-// @episensor/app-framework/src/testing/TestUtils.ts
+// @superdangerous/app-framework/src/testing/TestUtils.ts
 import { Express } from 'express';
 import request from 'supertest';
 import { vi } from 'vitest';
@@ -536,12 +536,12 @@ export function createTestContext() {
 ### 6. Shared ESLint Configuration
 
 ```bash
-# New package: @episensor/eslint-config
-npm init @episensor/eslint-config
+# New package: @superdangerous/eslint-config
+npm init @superdangerous/eslint-config
 ```
 
 ```javascript
-// @episensor/eslint-config/index.js
+// @superdangerous/eslint-config/index.js
 module.exports = {
   extends: [
     'eslint:recommended',
@@ -571,7 +571,7 @@ module.exports = {
 ### 7. Docker Template Generator
 
 ```typescript
-// @episensor/app-framework/src/cli/docker.ts
+// @superdangerous/app-framework/src/cli/docker.ts
 export class DockerGenerator {
   static generateDockerfile(options: {
     nodeVersion?: string;
@@ -620,7 +620,7 @@ coverage
 ### 8. Metrics and Monitoring
 
 ```typescript
-// @episensor/app-framework/src/monitoring/Metrics.ts
+// @superdangerous/app-framework/src/monitoring/Metrics.ts
 import { Registry, Counter, Histogram, Gauge } from 'prom-client';
 
 export class MetricsService {
@@ -695,7 +695,7 @@ export class MetricsService {
 ### 9. Feature Flag System
 
 ```typescript
-// @episensor/app-framework/src/features/FeatureFlags.ts
+// @superdangerous/app-framework/src/features/FeatureFlags.ts
 export class FeatureFlagService {
   private flags: Map<string, boolean> = new Map();
   
@@ -723,7 +723,7 @@ export class FeatureFlagService {
 ### 10. Database Migration System
 
 ```typescript
-// @episensor/app-framework/src/database/Migrator.ts
+// @superdangerous/app-framework/src/database/Migrator.ts
 export class DatabaseMigrator {
   async up(migrations: Migration[]): Promise<void> {
     // Run migrations
@@ -770,7 +770,7 @@ import {
   AuthenticationService,
   APIDocumentationService,
   MetricsService
-} from '@episensor/app-framework';
+} from '@superdangerous/app-framework';
 
 const config = new ConfigService({
   schema: AppConfigSchema,
@@ -811,4 +811,4 @@ const server = new StandardServer({
 
 ---
 
-*These enhancements will transform @episensor/app-framework into a comprehensive application framework, reducing app complexity while ensuring consistency.*
+*These enhancements will transform @superdangerous/app-framework into a comprehensive application framework, reducing app complexity while ensuring consistency.*

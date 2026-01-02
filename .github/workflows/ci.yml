@@ -140,7 +140,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: v__VERSION__  # Will be replaced by version from package.json
-          releaseName: 'EpiSensor App Template v__VERSION__'
+          releaseName: 'SuperDangerous App Template v__VERSION__'
           releaseBody: 'See the assets below for downloads'
           releaseDraft: true
           prerelease: false

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The EpiSensor App Template provides a comprehensive configuration system built on the @episensor/app-framework, enabling rapid development of internal applications with consistent settings and behaviour.
+The SuperDangerous App Template provides a comprehensive configuration system built on the @superdangerous/app-framework, enabling rapid development of internal applications with consistent settings and behaviour.
 
 ## Application Configuration
 
@@ -113,7 +113,7 @@ TAURI_AUTO_START=false
 The app template uses the framework's ConfigManager for centralised configuration:
 
 ```typescript
-import { ConfigManager } from '@episensor/app-framework';
+import { ConfigManager } from '@superdangerous/app-framework';
 
 // Load configuration
 const config = ConfigManager.getInstance();
@@ -207,7 +207,7 @@ The template automatically generates CSS custom properties from your configurati
 Configure structured logging with the framework's enhanced logger:
 
 ```typescript
-import { getLogger } from '@episensor/app-framework';
+import { getLogger } from '@superdangerous/app-framework';
 
 const logger = getLogger().createLogger('App');
 ```
@@ -243,7 +243,7 @@ logger.error('Database connection failed', {
 Configure real-time communication:
 
 ```typescript
-import { WebSocketManager } from '@episensor/app-framework';
+import { WebSocketManager } from '@superdangerous/app-framework';
 
 const wsManager = new WebSocketManager({
   port: config.get('ports.websocket'),
@@ -302,7 +302,7 @@ Configure desktop application behaviour in `src-tauri/tauri.conf.json`:
       }
     ],
     "bundle": {
-      "identifier": "com.episensor.your-app-name",
+      "identifier": "com.superdangerous.your-app-name",
       "category": "Utility",
       "shortDescription": "Brief description",
       "longDescription": "Detailed description of your application"
@@ -400,4 +400,4 @@ if (process.env.NODE_ENV === 'production') {
 4. **Monitoring**: Monitor configuration-related errors
 
 ---
-Copyright (C) EpiSensor 2025
+Copyright (C) SuperDangerous 2025

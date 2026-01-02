@@ -9,13 +9,13 @@
 | **PACKAGE.JSON (1-15)** |
 | 1 | Framework reference (npm) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | All compliant |
 | 2 | Framework version (4.3.2) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | All compliant |
-| 3 | Package scope (@episensor/) | ✗ | ✓ | ✓ | ✓ | ✓ | ✗ | Use @episensor |
+| 3 | Package scope (@superdangerous/) | ✗ | ✓ | ✓ | ✓ | ✓ | ✗ | Use @superdangerous |
 | 4 | Node engine (>=18.0.0) | ✗ | ✓ | ✓ | 1 | ✗ | ✓ | >=18.0.0 |
 | 5 | NPM engine specified | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | >=10.0.0 |
 | 6 | Type field (module) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | All compliant |
 | 7 | License (PROPRIETARY) | 2 | 3 | ✓ | ✓ | ✓ | ✓ | PROPRIETARY |
 | 8 | Private flag | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ | true |
-| 9 | Author field | 4 | ✓ | ✓ | ✓ | ✓ | 5 | EpiSensor |
+| 9 | Author field | 4 | ✓ | ✓ | ✓ | ✓ | 5 | SuperDangerous |
 | 10 | Description present | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | All compliant |
 | 11 | Repository field | ✗ | ✗ | ✗ | ✗ | ✓ | ✓ | Include URL |
 | 12 | Homepage field | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | Add homepage |
@@ -94,10 +94,10 @@
 
 ### Package.json Issues
 1. **epi-vpp-manager**: Uses >=20.19.0 (too specific, should be >=18.0.0)
-2. **epi-cpcodebase**: License is "(C) EpiSensor 2025" instead of "PROPRIETARY"
+2. **epi-cpcodebase**: License is "(C) SuperDangerous 2025" instead of "PROPRIETARY"
 3. **epi-app-template**: License is "MIT" instead of "PROPRIETARY"
-4. **epi-cpcodebase**: Author is "Brendan Carroll <brendan.carroll@episensor.com>" instead of "EpiSensor"
-5. **epi-competitor-ai**: Author is "EpiSensor <info@episensor.com>" instead of "EpiSensor"
+4. **epi-cpcodebase**: Author is "Brendan Carroll <brendan.carroll@superdangerous.net>" instead of "SuperDangerous"
+5. **epi-competitor-ai**: Author is "SuperDangerous <info@superdangerous.net>" instead of "SuperDangerous"
 
 ### Startup Issues
 6. **epi-cpcodebase**: Custom config instead of ConfigManager

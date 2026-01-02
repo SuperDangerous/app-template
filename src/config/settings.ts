@@ -1,13 +1,13 @@
 /**
- * Settings Configuration for EpiSensor App Template
+ * Settings Configuration for SuperDangerous App Template
  * Uses the framework's settings service
  */
 
 export const defaultSettings = {
   // Application
-  'app.name': 'EpiSensor App Template',
-  'app.description': 'A comprehensive template for EpiSensor applications',
-  'app.theme': 'episensor',
+  'app.name': 'SuperDangerous App Template',
+  'app.description': 'A comprehensive template for SuperDangerous applications',
+  'app.theme': 'superdangerous',
   'app.language': 'en',
   'app.autoUpdate': true,
   'app.updateChannel': 'stable',

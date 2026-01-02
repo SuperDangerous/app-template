@@ -1,7 +1,7 @@
-# EpiSensor Application Standardization Matrix
+# SuperDangerous Application Standardization Matrix
 
 > **Last Updated:** January 2025  
-> **Purpose:** Track standardization across all EpiSensor applications using the @episensor/app-framework  
+> **Purpose:** Track standardization across all SuperDangerous applications using the @superdangerous/app-framework  
 > **Applications Covered:** epi-cpcodebase, epi-app-template, epi-modbus-simulator, epi-vpp-manager, epi-node-programmer, epi-competitor-ai
 
 ## Quick Reference
@@ -16,7 +16,7 @@
 | **FRAMEWORK & DEPENDENCIES (1-10)** |
 | 1. Framework reference method (npm vs local) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | 2. Framework version (^4.3.2) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| 3. Package naming convention (@episensor/) | 1 | ✓ | ✓ | ✓ | ✓ | 1 |
+| 3. Package naming convention (@superdangerous/) | 1 | ✓ | ✓ | ✓ | ✓ | 1 |
 | 4. Node.js engine requirement (>=20.19.0) | 2 | ✓ | ✓ | ✓ | 2 | ✓ |
 | 5. Package.json type field ("module") | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | 6. License field consistency | 3 | 4 | 5 | 5 | 5 | 5 |
@@ -78,8 +78,8 @@
 ### Framework & Dependencies Issues
 
 **1. Package naming convention:**
-- **epi-cpcodebase:** Uses "epi-cpcodebase" instead of "@episensor/cpcodebase"
-- **epi-competitor-ai:** Uses "epi-competitor-ai" instead of "@episensor/competitor-ai"
+- **epi-cpcodebase:** Uses "epi-cpcodebase" instead of "@superdangerous/cpcodebase"
+- **epi-competitor-ai:** Uses "epi-competitor-ai" instead of "@superdangerous/competitor-ai"
 - **Recommendation:** Migrate to scoped package names for consistency and namespace protection
 
 **2. Node.js engine requirement:**
@@ -88,7 +88,7 @@
 - **Recommendation:** Add `"engines": { "node": ">=20.19.0", "npm": ">=10.0.0" }`
 
 **3-5. License field inconsistency:**
-- **epi-cpcodebase:** Uses "(C) EpiSensor 2025"
+- **epi-cpcodebase:** Uses "(C) SuperDangerous 2025"
 - **epi-app-template:** Uses "MIT" 
 - **Others:** Use "PROPRIETARY"
 - **Recommendation:** Standardize on "PROPRIETARY" for internal apps
@@ -98,10 +98,10 @@
 - **Recommendation:** Add to all internal applications
 
 **7-9. Author field format inconsistency:**
-- **epi-cpcodebase:** "Brendan Carroll <brendan.carroll@episensor.com>"
-- **epi-app-template/modbus/vpp/node:** "EpiSensor"
-- **epi-competitor-ai:** "EpiSensor <info@episensor.com>"
-- **Recommendation:** Standardize on "EpiSensor"
+- **epi-cpcodebase:** "Brendan Carroll <brendan.carroll@superdangerous.net>"
+- **epi-app-template/modbus/vpp/node:** "SuperDangerous"
+- **epi-competitor-ai:** "SuperDangerous <info@superdangerous.net>"
+- **Recommendation:** Standardize on "SuperDangerous"
 
 **10. Repository field missing:**
 - Missing in most apps except epi-node-programmer and epi-competitor-ai
@@ -198,7 +198,7 @@
 - **Recommendation:** Separate web directory with Vite + React
 
 **39-40. UI component library:**
-- **epi-modbus-simulator:** Uses older @episensor/ui-framework
+- **epi-modbus-simulator:** Uses older @superdangerous/ui-framework
 - **epi-node-programmer:** Missing modern Radix components
 - **Recommendation:** Migrate to latest Radix UI components
 
@@ -214,13 +214,13 @@
 
 ### Medium Priority
 1. **Add API documentation** - OpenAPI specs for all endpoints
-2. **Standardize package naming** - Move to @episensor/ scope
+2. **Standardize package naming** - Move to @superdangerous/ scope
 3. **Add graceful shutdown** - Implement signal handlers
 4. **Unify ESLint configuration** - Single shared config
 
 ### Low Priority
 1. **Add repository fields** - Include GitHub URLs
-2. **Standardize author format** - Use "EpiSensor" consistently
+2. **Standardize author format** - Use "SuperDangerous" consistently
 3. **Add coverage reporting** - Set coverage thresholds
 4. **Desktop mode detection** - Check for Tauri window
 

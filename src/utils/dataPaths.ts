@@ -5,11 +5,11 @@
 
 import path from 'path';
 import fs from 'fs';
-import { getAppDataPath, getDataFilePath, isDesktopApp } from '@episensor/app-framework';
+import { getAppDataPath, getDataFilePath, isDesktopApp } from '@superdangerous/app-framework';
 
 // Standard identifiers used by the template. Applications generated from this
 // template should customise these values in line with their own metadata.
-const APP_ID = 'com.episensor.app-template';
+const APP_ID = 'com.superdangerous.app-template';
 const APP_NAME = 'app-template';
 
 /**

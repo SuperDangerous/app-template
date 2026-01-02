@@ -1,2 +1,2 @@
 // Re-export useDebounce from framework
-export { useDebounce } from '@episensor/app-framework/ui';
+export { useDebounce } from '@superdangerous/app-framework/ui';

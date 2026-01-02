@@ -98,7 +98,7 @@ After building, you'll have:
 Use the framework utilities for platform-specific paths:
 
 ```typescript
-import { getAppDataPath, isDesktopApp } from '@episensor/app-framework';
+import { getAppDataPath, isDesktopApp } from '@superdangerous/app-framework';
 
 // Will use appropriate system directory when running as desktop app:
 // macOS: ~/Library/Application Support/yourapp/
@@ -180,5 +180,5 @@ For distribution, you'll need to code sign your application:
 ## Resources
 
 - [Tauri Documentation](https://tauri.app/v1/guides/)
-- [EpiSensor App Framework](../epi-app-framework/docs/TAURI_DESKTOP_APPS.md)
-- [Example Apps](https://github.com/episensor)
+- [SuperDangerous App Framework](../epi-app-framework/docs/TAURI_DESKTOP_APPS.md)
+- [Example Apps](https://github.com/SuperDangerous)

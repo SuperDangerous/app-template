@@ -1,6 +1,6 @@
 /**
  * Electron Preload Script
- * EpiSensor App Template
+ * SuperDangerous App Template
  *
  * Exposes a secure API to the renderer process via contextBridge.
  */

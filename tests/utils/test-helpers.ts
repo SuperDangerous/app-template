@@ -1,6 +1,6 @@
 /**
  * Test Helper Utilities
- * Common utilities for testing the EpiSensor App Template
+ * Common utilities for testing the SuperDangerous App Template
  */
 
 import { Server } from 'http';
@@ -12,7 +12,7 @@ import {
   WebSocketEventManager,
   getStorageService,
   healthCheck,
-} from '@episensor/app-framework';
+} from '@superdangerous/app-framework';
 import settingsRouter, { settingsService } from '../../src/routes/settingsRouter.js';
 import { io as Client, Socket } from 'socket.io-client';
 
@@ -46,7 +46,7 @@ export async function createTestApp(): Promise<TestApp> {
     description: 'Test instance',
     port: testPort,
     webPort: testPort + 1,
-    appId: 'com.episensor.test',
+    appId: 'com.superdangerous.test',
     enableWebSocket: true,
 
     onInitialize: async (app: express.Application, wsServer?: any) => {

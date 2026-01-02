@@ -1,11 +1,11 @@
-# EpiSensor App Template Purpose
+# SuperDangerous App Template Purpose
 
 ## What This Template Is
 
-The EpiSensor App Template is a **thin branding layer** on top of the @episensor/app-framework. It provides:
+The SuperDangerous App Template is a **thin branding layer** on top of the @superdangerous/app-framework. It provides:
 
-1. **EpiSensor Visual Identity**
-   - Company logo assets (`/assets/episensor-dark.svg`)
+1. **SuperDangerous Visual Identity**
+   - Company logo assets (`/assets/superdangerous-dark.svg`)
    - Brand colors (primary: #E21350)
    - Consistent styling across internal apps
 
@@ -22,15 +22,15 @@ The EpiSensor App Template is a **thin branding layer** on top of the @episensor
 
 ## What This Template Is NOT
 
-- **NOT a framework** - All core functionality comes from @episensor/app-framework
-- **NOT for external use** - This contains EpiSensor-specific branding
+- **NOT a framework** - All core functionality comes from @superdangerous/app-framework
+- **NOT for external use** - This contains SuperDangerous-specific branding
 - **NOT where generic code belongs** - Generic utilities should be in the framework
 
 ## Why Keep It Thin?
 
 1. **Easier Updates** - When the framework updates, minimal changes needed
-2. **Clear Ownership** - Easy to see what's EpiSensor-specific vs generic
-3. **Faster Onboarding** - New developers see exactly what makes an app "EpiSensor"
+2. **Clear Ownership** - Easy to see what's SuperDangerous-specific vs generic
+3. **Faster Onboarding** - New developers see exactly what makes an app "SuperDangerous"
 4. **Reduced Maintenance** - Less code = fewer bugs
 
 ## Template Contents Explained
@@ -46,30 +46,30 @@ The EpiSensor App Template is a **thin branding layer** on top of the @episensor
 
 ### `/web` Directory
 
-**Purpose**: Frontend with EpiSensor styling
+**Purpose**: Frontend with SuperDangerous styling
 
-- `App.tsx` - Uses AppShell with EpiSensor colors and logo
+- `App.tsx` - Uses AppShell with SuperDangerous colors and logo
 - `pages/` - Example pages demonstrating UI patterns
 - `contexts/` - WebSocket context for real-time features
 - `lib/api.ts` - Simple API client utilities
 
 ### `/assets` Directory
 
-**Purpose**: EpiSensor brand assets
+**Purpose**: SuperDangerous brand assets
 
 - Company logos
 - Icons for desktop packaging
-- Any EpiSensor-specific imagery
+- Any SuperDangerous-specific imagery
 
 ### Configuration Files
 
-- `app.json` - Application metadata with EpiSensor defaults
+- `app.json` - Application metadata with SuperDangerous defaults
 - `package.json` - Configured to use framework tools
 - `src-tauri/` - Desktop packaging configuration
 
 ## How to Use This Template
 
-1. **Clone it** - Start every new EpiSensor app from this template
+1. **Clone it** - Start every new SuperDangerous app from this template
 2. **Rename it** - Update app.json with your app's name and details
 3. **Keep example code** - Use as reference, delete what you don't need
 4. **Don't add generic code** - Put reusable code in the framework instead
@@ -77,7 +77,7 @@ The EpiSensor App Template is a **thin branding layer** on top of the @episensor
 ## When to Modify the Template
 
 ✅ **DO modify when:**
-- Updating EpiSensor branding
+- Updating SuperDangerous branding
 - Changing company-wide port standards
 - Adding new example patterns
 - Updating to newer framework versions
@@ -91,15 +91,15 @@ The EpiSensor App Template is a **thin branding layer** on top of the @episensor
 ## Relationship to Other Repos
 
 ```
-@episensor/app-framework (Public, MIT)
+@superdangerous/app-framework (Public, MIT)
     ↓ provides functionality
 epi-app-template (Internal)
     ↓ used as starting point
-Your EpiSensor App (Internal)
+Your SuperDangerous App (Internal)
 ```
 
 Each app built from this template should:
-1. Keep the EpiSensor branding
+1. Keep the SuperDangerous branding
 2. Use the framework's features
 3. Add only app-specific code
 4. Not duplicate framework functionality

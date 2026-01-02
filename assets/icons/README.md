@@ -2,9 +2,9 @@
 
 This directory contains icon files for applications.
 
-## EpiSensor Brand Icon
+## SuperDangerous Brand Icon
 
-- `icon.png` - The official EpiSensor logo in PNG format
+- `icon.png` - The official SuperDangerous logo in PNG format
 
 ## For Tauri Applications
 
@@ -26,6 +26,6 @@ npx tauri icon src-tauri/icons/icon.png
 
 ## Usage Guidelines
 
-- Use the EpiSensor icon for all official applications
+- Use the SuperDangerous icon for all official applications
 - Maintain brand consistency across all projects
 - Don't modify the icon colors or proportions

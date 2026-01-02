@@ -5,7 +5,7 @@ import {
   ConnectionOverlay,
   useSocketIO,
   useConnectionStatus,
-} from '@episensor/app-framework/ui';
+} from '@superdangerous/app-framework/ui';
 import { Toaster } from 'sonner';
 import { Home, Settings, FileText } from 'lucide-react';
 import { HomePage } from './pages/HomePage';
@@ -85,7 +85,7 @@ const AppContent: React.FC = () => {
     <AppLayout
       appName={appInfo.name}
       appVersion={appInfo.version}
-      logoSrc="/assets/episensor-dark.svg"
+      logoSrc="/assets/superdangerous-dark.svg"
       navigation={navigation}
       currentPath={location.pathname}
       onNavigate={navigate}

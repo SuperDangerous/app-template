@@ -2,7 +2,7 @@
 
 ## Overview
 
-The EpiSensor App Template provides a foundation for building REST APIs and WebSocket services using the @episensor/app-framework. This document covers the standard API patterns, framework integration, and example implementations.
+The SuperDangerous App Template provides a foundation for building REST APIs and WebSocket services using the @superdangerous/app-framework. This document covers the standard API patterns, framework integration, and example implementations.
 
 ## Framework Integration
 
@@ -18,7 +18,7 @@ import {
   healthCheck,
   cors,
   auth 
-} from '@episensor/app-framework';
+} from '@superdangerous/app-framework';
 
 const app = express();
 const config = ConfigManager.getInstance();
@@ -156,7 +156,7 @@ app.put('/api/v1/config', auth.requireAdmin, async (req, res) => {
 The template provides WebSocket integration through the framework:
 
 ```typescript
-import { WebSocketManager } from '@episensor/app-framework';
+import { WebSocketManager } from '@superdangerous/app-framework';
 
 const wsManager = new WebSocketManager({
   port: config.get('ports.websocket'),
@@ -416,7 +416,7 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 Using the framework's authentication system:
 
 ```typescript
-import { auth } from '@episensor/app-framework';
+import { auth } from '@superdangerous/app-framework';
 
 // Protect routes that require authentication
 app.use('/api/v1/admin', auth.requireAuth);
@@ -448,7 +448,7 @@ const payload = auth.verifyToken(token);
 
 ```typescript
 import express from 'express';
-import { auth, validation } from '@episensor/app-framework';
+import { auth, validation } from '@superdangerous/app-framework';
 import { z } from 'zod';
 
 const router = express.Router();
@@ -526,4 +526,4 @@ export default router;
 ```
 
 ---
-Copyright (C) EpiSensor 2025
+Copyright (C) SuperDangerous 2025

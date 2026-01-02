@@ -13,7 +13,7 @@ test.describe('Frontend Startup Tests', () => {
     expect(page.url()).toContain(`localhost:${FRONTEND_PORT}`);
 
     // Page should load without errors
-    await expect(page).toHaveTitle(/EpiSensor/i);
+    await expect(page).toHaveTitle(/SuperDangerous/i);
   });
 
   test('should have no JavaScript errors on initial load', async ({ page }) => {

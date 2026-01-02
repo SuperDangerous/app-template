@@ -1,10 +1,10 @@
-# Comprehensive Testing Report - EpiSensor Applications
+# Comprehensive Testing Report - SuperDangerous Applications
 **Date:** 14 September 2025  
-**Framework Version:** @episensor/app-framework v4.3.2
+**Framework Version:** @superdangerous/app-framework v4.3.2
 
 ## Executive Summary
 
-Comprehensive testing was performed across six EpiSensor applications following standardisation updates. The testing included manual testing, API verification, browser console checks, desktop builds, and CI/CD validation.
+Comprehensive testing was performed across six SuperDangerous applications following standardisation updates. The testing included manual testing, API verification, browser console checks, desktop builds, and CI/CD validation.
 
 ## Test Coverage
 
@@ -104,9 +104,9 @@ Comprehensive testing was performed across six EpiSensor applications following 
 ## Standardisation Achievements
 
 ### Successfully Standardised
-- ✅ Package naming (@episensor/ scope)
+- ✅ Package naming (@superdangerous/ scope)
 - ✅ License field (PROPRIETARY)
-- ✅ Author field (EpiSensor Ltd)
+- ✅ Author field (SuperDangerous Ltd)
 - ✅ Framework version (4.3.2)
 - ✅ Graceful shutdown handlers
 - ✅ WebSocket support (enableWebSocket: true)
@@ -130,7 +130,7 @@ Comprehensive testing was performed across six EpiSensor applications following 
 
 ## Conclusion
 
-The comprehensive testing phase has been successful with all critical functionality working across the six EpiSensor applications. The standardisation efforts have significantly improved consistency, and the applications are ready for deployment with the new framework version 4.3.2.
+The comprehensive testing phase has been successful with all critical functionality working across the six SuperDangerous applications. The standardisation efforts have significantly improved consistency, and the applications are ready for deployment with the new framework version 4.3.2.
 
 **Overall Assessment: PASS with minor issues**
 
@@ -139,5 +139,5 @@ All applications are functional and meet the requirements for internal tools. Th
 ---
 
 *Report compiled using automated testing tools and manual verification*  
-*Framework: @episensor/app-framework v4.3.2*  
+*Framework: @superdangerous/app-framework v4.3.2*  
 *Test Environment: macOS Darwin 22.6.0*

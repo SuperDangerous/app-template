@@ -1,13 +1,13 @@
-# EpiSensor App Template
+# SuperDangerous App Template
 
-🚀 **Ready-to-go template for EpiSensor internal applications** - Copy, customize, and start building!
+🚀 **Ready-to-go template for SuperDangerous internal applications** - Copy, customize, and start building!
 
-Built on `@episensor/app-framework` for consistent logging, config, WebSocket, and middleware across all EpiSensor apps.
+Built on `@superdangerous/app-framework` for consistent logging, config, WebSocket, and middleware across all SuperDangerous apps.
 
 ## ✨ What's Included
 
-### 🏗️ EpiSensor-Specific Template Features
-- **🎨 EpiSensor Branding**: Colors, logos, typography, styling
+### 🏗️ SuperDangerous-Specific Template Features
+- **🎨 SuperDangerous Branding**: Colors, logos, typography, styling
 - **📦 Tauri Desktop Packaging**: Cross-platform builds (macOS, Windows, Linux)
 - **⚙️ Project Structure**: Organized folders, configs, and wireframes
 - **🔄 CI/CD Workflows**: GitHub Actions for testing and releases
@@ -15,7 +15,7 @@ Built on `@episensor/app-framework` for consistent logging, config, WebSocket, a
 - **🚀 Port Allocation**: Configured default ports (change for your app)
 
 ### 🛠️ Framework-Powered Foundation
-- **📊 Logging**: Structured logging via `@episensor/app-framework`
+- **📊 Logging**: Structured logging via `@superdangerous/app-framework`
 - **⚙️ Configuration**: Zod validation, file watching, env merging
 - **🔌 WebSocket**: Advanced Socket.IO management with rooms/auth
 - **🏥 Health Monitoring**: Built-in health endpoints and metrics
@@ -62,7 +62,7 @@ epi-app-template/
 
 1. **Clone this template**:
    ```bash
-   git clone https://github.com/episensor/epi-app-template.git my-new-app
+   git clone https://github.com/SuperDangerous/epi-app-template.git my-new-app
    cd my-new-app
    ```
 
@@ -76,7 +76,7 @@ epi-app-template/
    # Choose unique ports (see PORT_ALLOCATION.md)
    # Edit app.json
    {
-     "name": "My EpiSensor App",
+     "name": "My SuperDangerous App",
      "ports": { "api": 3025, "web": 5178, "websocket": 3025 }
    }
    
@@ -96,21 +96,21 @@ epi-app-template/
 
 This template follows a clear separation of concerns:
 
-- **`@episensor/app-framework`** = Generic services (logging, config, WebSocket, middleware)
-- **`epi-app-template`** = EpiSensor branding + project structure + Tauri packaging
+- **`@superdangerous/app-framework`** = Generic services (logging, config, WebSocket, middleware)
+- **`epi-app-template`** = SuperDangerous branding + project structure + Tauri packaging
 
 ```typescript
 // Your app uses framework services
-import { createLogger, ConfigManager, WebSocketManager } from '@episensor/app-framework';
+import { createLogger, ConfigManager, WebSocketManager } from '@superdangerous/app-framework';
 
-// Template provides EpiSensor-specific configuration
+// Template provides SuperDangerous-specific configuration
 const logger = createLogger('MyApp');           // Framework logging
 const config = new ConfigManager(appSchema);    // Template schema
 ```
 
 **Benefits:**
 - 🚀 **Rapid development**: Copy → customize → code features
-- 🎨 **Consistent EpiSensor identity**: Same branding across all apps  
+- 🎨 **Consistent SuperDangerous identity**: Same branding across all apps  
 - 🔧 **Framework updates**: `npm update` pulls latest improvements
 - 📋 **Best practices**: Security, monitoring, error handling built-in
 
@@ -220,7 +220,7 @@ git push origin v1.0.0
 4. Customize theme in `web/src/App.tsx`
 
 ### Framework Integration
-The template uses `@episensor/app-framework` for:
+The template uses `@superdangerous/app-framework` for:
 - Logging utilities
 - UI components (React)
 - Standard patterns and utilities
@@ -252,7 +252,7 @@ Extend `src-tauri/src/main.rs` to add:
 ## 📚 Documentation
 
 - [Tauri Documentation](https://tauri.app/)
-- [EpiSensor App Framework](https://github.com/episensor/epi-app-framework)
+- [SuperDangerous App Framework](https://github.com/SuperDangerous/epi-app-framework)
 - [React Documentation](https://react.dev/)
 - [Vite Documentation](https://vitejs.dev/)
 
@@ -272,4 +272,4 @@ MIT License - See LICENSE file for details.
 
 **Happy Building!** 🎉
 
-This template provides everything you need to create professional EpiSensor desktop applications with modern web technologies and native desktop capabilities.
+This template provides everything you need to create professional SuperDangerous desktop applications with modern web technologies and native desktop capabilities.

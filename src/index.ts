@@ -1,12 +1,12 @@
 /**
- * EpiSensor App Template
+ * SuperDangerous App Template
  * Comprehensive wireframe application demonstrating all framework features
  * 
  * Features:
  * - Enhanced Settings Management with SettingsSchema
  * - Advanced Logging with categories and rotation
  * - WebSocket support for real-time communication
- * - EpiSensor branding and professional UI
+ * - SuperDangerous branding and professional UI
  * - Health monitoring and diagnostics
  * - Secure file storage
  */
@@ -18,7 +18,7 @@ import {
   WebSocketEventManager,
   getStorageService,
   healthCheck,
-} from '@episensor/app-framework';
+} from '@superdangerous/app-framework';
 import express from 'express';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -56,12 +56,12 @@ async function main() {
 
   // Create and configure server
   const server = new StandardServer({
-    appName: settings['app.name'] || 'EpiSensor App Template',
+    appName: settings['app.name'] || 'SuperDangerous App Template',
     appVersion: packageJson.version,
     description: settings['app.description'] || 'Professional application framework',
     port: settings['network.apiPort'] || 7500,
     webPort: settings['network.webPort'] || 7501,
-    appId: 'com.episensor.app-template',
+    appId: 'com.superdangerous.app-template',
     enableWebSocket: settings['network.enableWebSocket'] !== false,
     
     onInitialize: async (app: express.Application, wsServer?: any) => {
@@ -79,7 +79,7 @@ async function main() {
         res.json({
           success: true,
           data: {
-            appName: settings['app.name'] || packageJson.name || 'EpiSensor App Template',
+            appName: settings['app.name'] || packageJson.name || 'SuperDangerous App Template',
             appVersion: packageJson.version,
             apiUrl: `http://localhost:${settings['network.apiPort'] || 7500}`,
             websocketEnabled: settings['network.enableWebSocket'] !== false,
@@ -109,7 +109,7 @@ async function main() {
         res.json({
           success: true,
           data: {
-          name: settings['app.name'] || 'EpiSensor App Template',
+          name: settings['app.name'] || 'SuperDangerous App Template',
           version: packageJson.version,
           description: settings['app.description'],
           environment: settings['advanced.environment'] || process.env.NODE_ENV || 'production',
@@ -247,10 +247,10 @@ async function main() {
         res.json({
           success: true,
           data: {
-            message: 'Hello from EpiSensor App Template!',
+            message: 'Hello from SuperDangerous App Template!',
             timestamp: new Date().toISOString(),
             version: packageJson.version,
-            theme: settings['app.theme'] || 'episensor'
+            theme: settings['app.theme'] || 'superdangerous'
           },
           message: 'Example endpoint'
         });

@@ -150,7 +150,7 @@ describe('API Endpoints Integration Tests', () => {
 
       // Verify reset
       const verifyResponse = await makeRequest(`${testApp.baseUrl}/api/settings/app.name`);
-      expect(verifyResponse.data.data.value).toBe('EpiSensor App Template'); // Default value
+      expect(verifyResponse.data.data.value).toBe('SuperDangerous App Template'); // Default value
     });
 
     it('POST /api/settings/reset/:key should reset specific setting', async () => {
@@ -170,7 +170,7 @@ describe('API Endpoints Integration Tests', () => {
 
       // Verify reset
       const verifyResponse = await makeRequest(`${testApp.baseUrl}/api/settings/app.name`);
-      expect(verifyResponse.data.data.value).toBe('EpiSensor App Template');
+      expect(verifyResponse.data.data.value).toBe('SuperDangerous App Template');
     });
 
     it('GET /api/settings/export/json should export settings', async () => {

@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { LogsPage as FrameworkLogsPage } from '@episensor/app-framework/ui';
+import { LogsPage as FrameworkLogsPage } from '@superdangerous/app-framework/ui';
 
 export function LogsPage() {
   return (

@@ -1,4 +1,4 @@
-# EpiSensor App Port Assignments
+# SuperDangerous App Port Assignments
 
 ## Standard Port Allocation
 
@@ -25,7 +25,7 @@ Each app gets 5 consecutive ports:
 | **epi-app-template** | 7500-7504 | 7500 | 7501 | 7500 | 📋 Template |
 
 ### Non-Framework Apps (for reference only)
-Other apps not using @episensor/app-framework should follow the same port block scheme but are managed independently.
+Other apps not using @superdangerous/app-framework should follow the same port block scheme but are managed independently.
 
 ### Port Allocation Guidelines
 

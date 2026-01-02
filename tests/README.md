@@ -2,7 +2,7 @@
 
 ## Overview
 
-This comprehensive test suite covers all aspects of the EpiSensor App Template, including:
+This comprehensive test suite covers all aspects of the SuperDangerous App Template, including:
 
 - **Unit Tests**: Individual function and module testing
 - **Integration Tests**: API endpoints, server startup, and service communication
@@ -254,4 +254,4 @@ npm run test:e2e:debug
 - **E2E Tests**: All user workflows covered
 - **Error Scenarios**: All error conditions tested
 
-The test suite ensures comprehensive verification of the EpiSensor App Template functionality while maintaining fast execution and reliable results.
+The test suite ensures comprehensive verification of the SuperDangerous App Template functionality while maintaining fast execution and reliable results.

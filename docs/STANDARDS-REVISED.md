@@ -1,4 +1,4 @@
-# EpiSensor Application Standardization - Revised Assessment
+# SuperDangerous Application Standardization - Revised Assessment
 
 > **Last Updated:** January 2025  
 > **Version:** 3.0 - Focused on existing feature standardization  
@@ -35,7 +35,7 @@ Focusing only on features that exist in at least one app:
 | **PACKAGE.JSON** |
 | 1 | Framework reference method | All | ✅ All use npm (standardized) |
 | 2 | Framework version | All | ✅ All use 4.3.2 (standardized) |
-| 3 | Package naming (@episensor/) | 4/6 | ⚠️ epi-cpcodebase, epi-competitor-ai need update |
+| 3 | Package naming (@superdangerous/) | 4/6 | ⚠️ epi-cpcodebase, epi-competitor-ai need update |
 | 4 | Node engine specified | 4/6 | ⚠️ Inconsistent versions where specified |
 | 5 | Type field ("module") | All | ✅ All use "module" (standardized) |
 | 6 | License field | All | ⚠️ Mixed (MIT, PROPRIETARY, custom) |
@@ -113,7 +113,7 @@ Focusing only on features that exist in at least one app:
    - Effort: Low
 
 3. **Package Naming**
-   - Current: 2 apps missing @episensor scope
+   - Current: 2 apps missing @superdangerous scope
    - Action: Rename packages
    - Effort: Low
 
@@ -148,7 +148,7 @@ Focusing only on features that exist in at least one app:
 
 9. **Author Field Format**
    - Current: Various formats
-   - Action: Use "EpiSensor"
+   - Action: Use "SuperDangerous"
    - Effort: Trivial
 
 10. **Node Engine Version**
@@ -170,7 +170,7 @@ These differences are intentional and should remain:
 ## Realistic Action Plan
 
 ### Week 1: Quick Wins
-- [ ] Rename packages to @episensor/* (2 apps)
+- [ ] Rename packages to @superdangerous/* (2 apps)
 - [ ] Standardize license field to PROPRIETARY
 - [ ] Fix author field format
 - [ ] Align Node engine to >=18.0.0

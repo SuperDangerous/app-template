@@ -1,4 +1,4 @@
-import { Card, Button } from '@episensor/app-framework/ui';
+import { Card, Button } from '@superdangerous/app-framework/ui';
 import { Activity, Server, Database, Cpu, HardDrive, Wifi, Settings, FileText } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ export function HomePage() {
   const navigate = useNavigate();
   const [stats, setStats] = useState<SystemStats | null>(null);
   const [appInfo, setAppInfo] = useState({ 
-    name: 'EpiSensor App Template', 
+    name: 'SuperDangerous App Template', 
     version: '1.1.0',
     description: 'Template application'
   });
@@ -32,7 +32,7 @@ export function HomePage() {
           ? (response as { data: Record<string, any> }).data
           : response;
         setAppInfo({
-          name: payload?.appName || 'EpiSensor App Template',
+          name: payload?.appName || 'SuperDangerous App Template',
           version: payload?.appVersion || '1.1.0',
           description: payload?.description || 'Template application',
         });
@@ -74,7 +74,7 @@ export function HomePage() {
               Welcome to {appInfo.name}
             </h1>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
-              {appInfo.description || 'A comprehensive template for building EpiSensor applications'}
+              {appInfo.description || 'A comprehensive template for building SuperDangerous applications'}
             </p>
           </div>
           <Activity className="h-12 w-12 text-pink-500" />
@@ -213,7 +213,7 @@ export function HomePage() {
 
       {/* Footer */}
       <div className="text-center text-sm text-gray-500 dark:text-gray-400 pt-4">
-        <p>Built with EpiSensor App Framework v4.3.0</p>
+        <p>Built with SuperDangerous App Framework v4.3.0</p>
         <p className="mt-1">Ready for your business logic</p>
       </div>
     </div>

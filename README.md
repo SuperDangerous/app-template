@@ -1,8 +1,8 @@
-# EpiSensor App Template
+# SuperDangerous App Template
 
-🚀 **Ready-to-go template for EpiSensor internal applications**
+🚀 **Ready-to-go template for SuperDangerous internal applications**
 
-This is the official template for creating new EpiSensor desktop applications. It provides a complete setup with our standard branding, colours, and architecture patterns.
+This is the official template for creating new SuperDangerous desktop applications. It provides a complete setup with our standard branding, colours, and architecture patterns.
 
 ## 📖 Documentation
 
@@ -16,7 +16,7 @@ This is the official template for creating new EpiSensor desktop applications. I
 
 ```bash
 # Clone this template
-git clone https://github.com/episensor/epi-app-template.git my-new-app
+git clone https://github.com/SuperDangerous/epi-app-template.git my-new-app
 cd my-new-app
 
 # Install dependencies
@@ -34,9 +34,9 @@ This will start:
 
 ## 📦 What's Included
 
-- **EpiSensor Branding**: Company colours (#E21350), logos, and styling
+- **SuperDangerous Branding**: Company colours (#E21350), logos, and styling
 - **Standard Layout**: Navigation, connection status, app shell
-- **Framework Integration**: Built on @episensor/app-framework
+- **Framework Integration**: Built on @superdangerous/app-framework
 - **Desktop Packaging**: Cross-platform Tauri builds
 - **Real-time Support**: WebSocket connections built-in
 - **Logging & Config**: Production-ready from the start
@@ -50,6 +50,6 @@ This will start:
 
 ---
 
-Built with ❤️ for EpiSensor internal applications
+Built with ❤️ for SuperDangerous internal applications
 
-Copyright (C) EpiSensor 2025
+Copyright (C) SuperDangerous 2025

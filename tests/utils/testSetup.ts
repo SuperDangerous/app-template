@@ -3,7 +3,7 @@
  * Common utilities and helpers for tests
  */
 
-import { StandardServer, ConfigManager, createLogger } from '@episensor/app-framework';
+import { StandardServer, ConfigManager, createLogger } from '@superdangerous/app-framework';
 import { setupApp } from '../../src/setupApp.js';
 import request from 'supertest';
 import { Express } from 'express';

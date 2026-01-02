@@ -1,7 +1,7 @@
 {
-  "name": "EpiSensor App Template",
+  "name": "SuperDangerous App Template",
   "version": "1.0.0",
-  "description": "Template for EpiSensor Electron desktop applications",
+  "description": "Template for SuperDangerous Electron desktop applications",
   "ports": {
     "api": 7500,
     "web": 7501,

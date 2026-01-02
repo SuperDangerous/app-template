@@ -4,7 +4,7 @@
  */
 
 import { Router } from 'express';
-import { SettingsService } from '@episensor/app-framework';
+import { SettingsService } from '@superdangerous/app-framework';
 import { defaultSettings, settingsMetadata } from '../config/settings.js';
 
 const router = Router();

@@ -1,10 +1,10 @@
 /**
- * Comprehensive Test Suite for EpiSensor App Template
+ * Comprehensive Test Suite for SuperDangerous App Template
  * Entry point for all backend unit and integration tests
  */
 import { describe, it, expect } from 'vitest';
 
-describe('EpiSensor App Template Test Suite', () => {
+describe('SuperDangerous App Template Test Suite', () => {
   it('should have test environment configured correctly', () => {
     expect(process.env.NODE_ENV).toBeDefined();
     expect(typeof describe).toBe('function');

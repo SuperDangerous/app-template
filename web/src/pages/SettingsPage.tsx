@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { SettingsPage as FrameworkSettingsPage, defaultSettingsCategories } from '@episensor/app-framework/ui';
+import { SettingsPage as FrameworkSettingsPage, defaultSettingsCategories } from '@superdangerous/app-framework/ui';
 import { Settings, Network, FileText, Shield, Bell } from 'lucide-react';
 import { api } from '../utils/api';
 import { toast } from 'sonner';

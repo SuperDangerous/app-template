@@ -13,7 +13,7 @@
 
 1. **Create New App from Template**
    ```bash
-   git clone https://github.com/episensor/epi-app-template.git my-new-app
+   git clone https://github.com/SuperDangerous/epi-app-template.git my-new-app
    cd my-new-app
    rm -rf .git
    git init
@@ -122,7 +122,7 @@ npm run test:coverage
 ```typescript
 // src/index.ts - Main server setup
 import express from 'express';
-import { ConfigManager, getLogger } from '@episensor/app-framework';
+import { ConfigManager, getLogger } from '@superdangerous/app-framework';
 
 const app = express();
 const config = ConfigManager.getInstance();
@@ -233,7 +233,7 @@ export const DataTable: React.FC<DataTableProps> = ({
 {
   "name": "my-awesome-app",
   "displayName": "My Awesome App",
-  "description": "An awesome EpiSensor internal application",
+  "description": "An awesome SuperDangerous internal application",
   "version": "1.0.0",
   "ports": {
     "http": 3015,
@@ -460,7 +460,7 @@ describe('DataTable', () => {
    {
      "tauri": {
        "bundle": {
-         "identifier": "com.episensor.your-app",
+         "identifier": "com.superdangerous.your-app",
          "icon": ["icons/your-icon.png"]
        }
      }
@@ -477,7 +477,7 @@ import compression from 'compression';
 app.use(compression());
 
 // Request caching
-import { cacheManager } from '@episensor/app-framework';
+import { cacheManager } from '@superdangerous/app-framework';
 const cache = cacheManager.createCache({ ttl: 300 }); // 5 minutes
 
 app.get('/api/v1/data', async (req, res) => {
@@ -546,7 +546,7 @@ module.exports = {
           chunks: 'all',
         },
         framework: {
-          test: /[\\/]node_modules[\\/]@episensor[\\/]/,
+          test: /[\\/]node_modules[\\/]@superdangerous[\\/]/,
           name: 'framework',
           chunks: 'all',
           priority: 10,
@@ -592,4 +592,4 @@ CMD ["npm", "start"]
 5. **Pull Requests**: Include description of changes and testing performed
 
 ---
-Copyright (C) EpiSensor 2025
+Copyright (C) SuperDangerous 2025

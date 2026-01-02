@@ -1,12 +1,12 @@
-# EpiSensor App Template Architecture
+# SuperDangerous App Template Architecture
 
 ## 📋 Separation of Concerns
 
-This document defines the clear separation between `@episensor/app-framework` and `epi-app-template` to enable rapid development of EpiSensor internal applications.
+This document defines the clear separation between `@superdangerous/app-framework` and `epi-app-template` to enable rapid development of SuperDangerous internal applications.
 
-### 🏗️ @episensor/app-framework (Generic Foundation)
+### 🏗️ @superdangerous/app-framework (Generic Foundation)
 
-The framework provides **generic, reusable services** that work across all EpiSensor applications:
+The framework provides **generic, reusable services** that work across all SuperDangerous applications:
 
 #### **Core Services**
 - **ConfigManager**: Schema validation, file watching, environment variable merging
@@ -36,15 +36,15 @@ The framework provides **generic, reusable services** that work across all EpiSe
 - **standardConfig**: Common configuration patterns
 - **TestServer**: Testing utilities for API endpoints
 
-### 🎨 epi-app-template (EpiSensor-Specific Template)
+### 🎨 epi-app-template (SuperDangerous-Specific Template)
 
-The template provides **EpiSensor-specific customizations** and **project structure** for rapid app development:
+The template provides **SuperDangerous-specific customizations** and **project structure** for rapid app development:
 
-#### **EpiSensor Branding & Styling**
-- **Brand colors**: EpiSensor color palette and themes
+#### **SuperDangerous Branding & Styling**
+- **Brand colors**: SuperDangerous color palette and themes
 - **Logo assets**: Company logos, favicons, app icons
 - **Typography**: Consistent font choices and styling
-- **Component styling**: EpiSensor-specific component appearances
+- **Component styling**: SuperDangerous-specific component appearances
 
 #### **Project Structure & Configuration**
 - **Tauri configuration**: Desktop app packaging for macOS/Windows/Linux
@@ -67,7 +67,7 @@ The template provides **EpiSensor-specific customizations** and **project struct
 
 ## 🚀 Development Workflow
 
-### For New EpiSensor Apps:
+### For New SuperDangerous Apps:
 
 1. **Copy the template**:
    ```bash
@@ -79,7 +79,7 @@ The template provides **EpiSensor-specific customizations** and **project struct
    ```bash
    # Update app.json
    {
-     "name": "My New EpiSensor App",
+     "name": "My New SuperDangerous App",
      "ports": { "api": 3025, "web": 5178, "websocket": 3025 }
    }
    
@@ -96,7 +96,7 @@ The template provides **EpiSensor-specific customizations** and **project struct
 
 ```typescript
 // Template's src/config.ts - Uses framework ConfigManager
-import { ConfigManager } from '@episensor/app-framework';
+import { ConfigManager } from '@superdangerous/app-framework';
 
 const configManager = new ConfigManager({
   schema: appSpecificSchema,    // Template defines app schema
@@ -109,9 +109,9 @@ import {
   createLogger,               // Framework provides logging
   WebSocketManager,          // Framework handles WebSocket
   startupBanner             // Framework displays startup
-} from '@episensor/app-framework';
+} from '@superdangerous/app-framework';
 
-// Template provides EpiSensor-specific configuration
+// Template provides SuperDangerous-specific configuration
 startupBanner({
   title: config.name,         // From template's app.json
   version: config.version,    // From template's package.json
@@ -124,12 +124,12 @@ startupBanner({
 1. **Rapid Development**: Copy template → customize basics → start coding features
 2. **Consistency**: All apps use same logging, config, WebSocket patterns
 3. **Maintainability**: Framework updates propagate to all apps via npm update
-4. **EpiSensor Identity**: Template ensures consistent branding and structure
+4. **SuperDangerous Identity**: Template ensures consistent branding and structure
 5. **Best Practices**: Framework enforces security, performance, monitoring standards
 
 ## 🔄 Update Strategy
 
-- **Framework updates**: `npm update @episensor/app-framework` pulls latest generic improvements
+- **Framework updates**: `npm update @superdangerous/app-framework` pulls latest generic improvements
 - **Template updates**: When template improves, developers can cherry-pick specific files
 - **Breaking changes**: Framework maintains backward compatibility; template documents migration guides
 

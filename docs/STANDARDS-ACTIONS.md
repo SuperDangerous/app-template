@@ -1,6 +1,6 @@
 # Standardization Action Plans
 
-> **Purpose:** Detailed, executable action plans for achieving 85%+ standardization across all EpiSensor applications
+> **Purpose:** Detailed, executable action plans for achieving 85%+ standardization across all SuperDangerous applications
 
 ## Critical Actions (Week 1)
 
@@ -55,13 +55,13 @@ export default defineConfig({
 **Action for each non-compliant app:**
 
 ```bash
-# epi-cpcodebase → @episensor/cpcodebase
+# epi-cpcodebase → @superdangerous/cpcodebase
 1. Update package.json name field
 2. Update all imports in dependent projects
 3. Update CI/CD references
 4. Update documentation
 
-# epi-competitor-ai → @episensor/competitor-ai
+# epi-competitor-ai → @superdangerous/competitor-ai
 1. Update package.json name field
 2. Update all imports
 3. Update build scripts
@@ -77,7 +77,7 @@ export default defineConfig({
 **Standard Config Implementation:**
 ```typescript
 // src/config/index.ts
-import { ConfigManager } from '@episensor/app-framework';
+import { ConfigManager } from '@superdangerous/app-framework';
 import { z } from 'zod';
 
 const ConfigSchema = z.object({
@@ -124,7 +124,7 @@ export async function initializeConfig(): Promise<AppConfig> {
 
 **Framework Enhancement:**
 ```typescript
-// @episensor/app-framework additions
+// @superdangerous/app-framework additions
 import { OpenAPIGenerator } from '@asteasolutions/zod-to-openapi';
 
 export class APIDocGenerator {
@@ -142,7 +142,7 @@ export class APIDocGenerator {
 ```typescript
 // src/api/docs.ts
 import { z } from 'zod';
-import { registry } from '@episensor/app-framework';
+import { registry } from '@superdangerous/app-framework';
 
 registry.registerPath({
   method: 'get',
@@ -189,7 +189,7 @@ npx husky add .husky/pre-commit "npx lint-staged"
 
 ### 6. Unify ESLint Configuration
 
-**Create @episensor/eslint-config package:**
+**Create @superdangerous/eslint-config package:**
 ```javascript
 // packages/eslint-config/index.js
 export default [
@@ -222,10 +222,10 @@ export default [
 **App usage:**
 ```javascript
 // eslint.config.js
-import episensorConfig from '@episensor/eslint-config';
+import superdangerousConfig from '@superdangerous/eslint-config';
 
 export default [
-  ...episensorConfig,
+  ...superdangerousConfig,
   // App-specific overrides if needed
 ];
 ```
@@ -305,7 +305,7 @@ jobs:
 
 **Framework additions:**
 ```typescript
-// @episensor/app-framework/monitoring
+// @superdangerous/app-framework/monitoring
 import { Counter, Histogram, register } from 'prom-client';
 
 export class MetricsCollector {
@@ -356,7 +356,7 @@ export class MetricsCollector {
 
 ### 1. Configuration Service Enhancements
 ```typescript
-// Add to @episensor/app-framework
+// Add to @superdangerous/app-framework
 export class ConfigService {
   // Schema validation
   validateSchema<T>(schema: ZodSchema<T>): T;
@@ -375,7 +375,7 @@ export class ConfigService {
 
 ### 2. Error Handler Middleware
 ```typescript
-// Add to @episensor/app-framework
+// Add to @superdangerous/app-framework
 export class ErrorHandler {
   static middleware() {
     return (err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -398,7 +398,7 @@ export class ErrorHandler {
 
 ### 3. Authentication Middleware
 ```typescript
-// Add to @episensor/app-framework
+// Add to @superdangerous/app-framework
 export class AuthMiddleware {
   static basic(users: Record<string, string>) {
     return basicAuth({ users, challenge: true });

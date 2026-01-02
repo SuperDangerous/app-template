@@ -1,6 +1,6 @@
 # Best Practices Reference Guide
 
-> **Purpose:** Document the best implementation of each standardization area from across all EpiSensor applications
+> **Purpose:** Document the best implementation of each standardization area from across all SuperDangerous applications
 
 ## Best Practice Champions by Category
 
@@ -9,7 +9,7 @@
 
 ```typescript
 // src/index.ts - BEST PRACTICE
-import { StandardServer, createLogger } from '@episensor/app-framework';
+import { StandardServer, createLogger } from '@superdangerous/app-framework';
 import { initializeConfig, getAllConfig } from './config/index.js';
 import { setupApp } from './setupApp.js';
 
@@ -122,7 +122,7 @@ export type AppConfig = z.infer<typeof ConfigSchema>;
 
 ```typescript
 // src/config/index.ts - BEST PRACTICE
-import { ConfigManager, SettingsService } from '@episensor/app-framework';
+import { ConfigManager, SettingsService } from '@superdangerous/app-framework';
 import { ConfigSchema, type AppConfig } from './schema.js';
 import { getConfigFilePath } from '../utils/dataPaths.js';
 
@@ -410,7 +410,7 @@ global.testUtils = {
 // src/api/index.ts - BEST PRACTICE
 import { Router } from 'express';
 import { z } from 'zod';
-import { validateRequest } from '@episensor/app-framework';
+import { validateRequest } from '@superdangerous/app-framework';
 
 import projectRoutes from './projects.js';
 import analysisRoutes from './analysis.js';
@@ -443,7 +443,7 @@ export default router;
 // src/api/projects.ts - BEST PRACTICE
 import { Router } from 'express';
 import { z } from 'zod';
-import { validateRequest, asyncHandler } from '@episensor/app-framework';
+import { validateRequest, asyncHandler } from '@superdangerous/app-framework';
 import { ProjectService } from '../services/ProjectService.js';
 
 const router = Router();
@@ -520,7 +520,7 @@ export default router;
 
 ```typescript
 // src/utils/logger.ts - BEST PRACTICE
-import { createLogger } from '@episensor/app-framework';
+import { createLogger } from '@superdangerous/app-framework';
 
 // Create categorized loggers
 export const loggers = {

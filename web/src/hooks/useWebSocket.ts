@@ -1,5 +1,5 @@
 // WebSocket hook using framework's useSocketIO
-import { useSocketIO, useConnectionStatus } from '@episensor/app-framework/ui';
+import { useSocketIO, useConnectionStatus } from '@superdangerous/app-framework/ui';
 import { useCallback } from 'react';
 
 export function useWebSocket() {

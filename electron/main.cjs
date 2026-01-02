@@ -1,6 +1,6 @@
 /**
  * Electron Main Process
- * EpiSensor App Template
+ * SuperDangerous App Template
  */
 
 const { app, BrowserWindow, shell, ipcMain, nativeTheme } = require('electron');
@@ -26,7 +26,7 @@ function createWindow() {
     minWidth: 800,
     minHeight: 600,
     show: false,
-    title: 'EpiSensor App Template',
+    title: 'SuperDangerous App Template',
     backgroundColor: nativeTheme.shouldUseDarkColors ? '#1a1a1a' : '#ffffff',
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
@@ -131,7 +131,7 @@ function showErrorPage(message) {
     <html>
       <head>
         <meta charset="UTF-8">
-        <title>Error - EpiSensor App Template</title>
+        <title>Error - SuperDangerous App Template</title>
         <style>
           body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

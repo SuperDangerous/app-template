@@ -28,22 +28,22 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref_name || github.event.inputs.tag }}
-          name: EpiSensor App Template ${{ github.ref_name || github.event.inputs.tag }}
+          name: SuperDangerous App Template ${{ github.ref_name || github.event.inputs.tag }}
           draft: true
           prerelease: false
           body: |
-            ## 🚀 EpiSensor App Template Release
+            ## 🚀 SuperDangerous App Template Release
             
             ### ✨ Features
             - Comprehensive settings management with persistence
             - WebSocket support with real-time communication  
-            - EpiSensor professional branding and UI
+            - SuperDangerous professional branding and UI
             - Health monitoring and diagnostics endpoints
             - Full TypeScript and modern tooling support
             
             ### 📦 What's Included
-            - Batteries-included template for EpiSensor applications
-            - Integration with @episensor/app-framework
+            - Batteries-included template for SuperDangerous applications
+            - Integration with @superdangerous/app-framework
             - Production-ready CI/CD configuration
             - Cross-platform desktop app support via Tauri
             
@@ -119,7 +119,7 @@ jobs:
       - name: Checkout framework
         uses: actions/checkout@v4
         with:
-          repository: episensor/app-framework
+          repository: SuperDangerous/app-framework
           path: ../epi-app-framework
           token: ${{ secrets.GITHUB_TOKEN }}
 
