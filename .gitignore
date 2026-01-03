@@ -116,3 +116,6 @@ desktop-dist/
 *.tar.gz
 *.rar
 *.7z
+
+# Electron builder output
+dist_electron/
