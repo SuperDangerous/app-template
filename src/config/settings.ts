@@ -3,6 +3,21 @@
  * Uses the framework's settings service
  */
 
+/**
+ * Type for all valid setting values
+ */
+export type SettingValue = string | number | boolean;
+
+/**
+ * Type for setting keys
+ */
+export type SettingKey = keyof typeof defaultSettings;
+
+/**
+ * Settings record type
+ */
+export type SettingsRecord = Record<string, SettingValue>;
+
 export const defaultSettings = {
   // Application
   'app.name': 'SuperDangerous App Template',

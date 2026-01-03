@@ -18,13 +18,25 @@ import {
   WebSocketEventManager,
   getStorageService,
   healthCheck,
+  WebSocketServer,
+  FileInfo,
 } from '@superdangerous/app-framework';
 import express from 'express';
+
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import settingsRouter, { settingsService } from './routes/settingsRouter.js';
 import { settingsMetadata } from './config/settings.js';
+
+/**
+ * Helper to extract error message from unknown error
+ */
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return 'Unknown error occurred';
+}
 
 // Get package.json for dynamic versioning
 const __filename = fileURLToPath(import.meta.url);
@@ -64,11 +76,11 @@ async function main() {
     appId: 'com.superdangerous.app-template',
     enableWebSocket: settings['network.enableWebSocket'] !== false,
     
-    onInitialize: async (app: express.Application, wsServer?: any) => {
+    onInitialize: async (app: express.Application, wsServer?: WebSocketServer) => {
       logger.info('Initializing application routes and middleware...');
 
       // Get the actual Socket.IO server from the wrapper
-      const io = wsServer?.getIO ? wsServer.getIO() : wsServer;
+      const io = wsServer?.getIO?.();
       
       // API Routes
       app.use('/api/logs', logsRouter);
@@ -142,15 +154,15 @@ async function main() {
             },
             message: 'System metrics retrieved'
           });
-        } catch (error: any) {
+        } catch (error: unknown) {
           res.status(500).json({
             success: false,
             message: 'Failed to get metrics',
-            error: error.message
+            error: getErrorMessage(error)
           });
         }
       });
-      
+
       // Storage service endpoints
       app.get('/api/storage/info', async (_req, res) => {
         try {
@@ -161,15 +173,15 @@ async function main() {
             data: {
               directories: dirs,
               fileCount: files.length,
-              totalSize: files.reduce((sum: number, f: any) => sum + f.size, 0)
+              totalSize: files.reduce((sum: number, f: FileInfo) => sum + (f.size || 0), 0)
             },
             message: 'Storage information'
           });
-        } catch (error: any) {
+        } catch (error: unknown) {
           res.status(500).json({
             success: false,
             message: 'Failed to get storage info',
-            error: error.message
+            error: getErrorMessage(error)
           });
         }
       });

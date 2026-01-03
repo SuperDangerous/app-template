@@ -38,7 +38,7 @@
     "setup": "npm install && cd web && npm install"
   },
   "dependencies": {
-    "@superdangerous/app-framework": "^4.9.0",
+    "@superdangerous/app-framework": "^4.9.2",
     "boxen": "^8.0.1",
     "concurrently": "^9.1.0",
     "cors": "^2.8.5",
