@@ -1,0 +1,17 @@
+version: 1.1.0
+files:
+  - url: SuperDangerous-App-Template-1.1.0-mac-arm64.zip
+    sha512: 8THTOmW25bUyP1M8LsOyU8+ZT8KOskvsDKh1k7ZbObsi4lsttuk6Bjl+v+n0LeYX8gyv7CFU0SVDbgCeQSL9xA==
+    size: 124896411
+  - url: SuperDangerous-App-Template-1.1.0-mac-universal.zip
+    sha512: xLxPR2zILkrWzCywjY/vD7YHS2neWLUKx5YkvW/8hIkaCE3YnGzO6uXBOP8ofxSUtRDK1mzhGpbeRJu5mlEaLA==
+    size: 203694177
+  - url: SuperDangerous-App-Template-1.1.0-mac-arm64.dmg
+    sha512: tu5XCdQlC03367Q/iDsQJvCwOzequZP0rxNapTVPvMbrvTsogDtk/psXWXGYqCo+6PlZRzoHedPKUT+1peu96g==
+    size: 129501533
+  - url: SuperDangerous-App-Template-1.1.0-mac-universal.dmg
+    sha512: +JsCG9yNFxVKdY9vutjYkvxmUHU7QIuxpLZ4PAoTmr5dK91dRdGa8m348iJieBC2Qo88nnvxHS2lNwhYSFGsag==
+    size: 210746134
+path: SuperDangerous-App-Template-1.1.0-mac-arm64.zip
+sha512: 8THTOmW25bUyP1M8LsOyU8+ZT8KOskvsDKh1k7ZbObsi4lsttuk6Bjl+v+n0LeYX8gyv7CFU0SVDbgCeQSL9xA==
+releaseDate: '2026-01-03T22:38:26.319Z'
