@@ -133,8 +133,15 @@ describe('WebSocket Integration Tests', () => {
         expect.fail('Should have thrown connection error');
       } catch (error: any) {
         expect(error).toBeInstanceOf(Error);
-        const message = String(error.message || error);
-        expect(message === 'WebSocket connection timeout' || message.includes('xhr')).toBe(true);
+        // Error message varies by transport type (xhr, websocket, timeout)
+        const message = String(error.message || error).toLowerCase();
+        const isConnectionError =
+          message.includes('timeout') ||
+          message.includes('xhr') ||
+          message.includes('websocket') ||
+          message.includes('econnrefused') ||
+          message.includes('connection');
+        expect(isConnectionError).toBe(true);
       }
     });
 

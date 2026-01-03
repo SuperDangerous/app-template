@@ -250,7 +250,11 @@ export async function createTestApp(): Promise<TestApp> {
  */
 export function createTestWebSocketClient(port: number): Promise<TestWebSocketClient> {
   return new Promise((resolve, reject) => {
-    const socket = Client(`http://localhost:${port}`);
+    // Use WebSocket transport only to avoid XHR polling issues on CI
+    const socket = Client(`http://localhost:${port}`, {
+      transports: ['websocket'],
+      forceNew: true,
+    });
 
     socket.on('connect', () => {
       resolve({
