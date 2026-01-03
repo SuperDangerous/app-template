@@ -5,7 +5,11 @@ export default defineConfig({
     environment: 'node',
     testTimeout: 10000,
 
-    // Limit parallel execution to reduce memory usage
+    // Run tests sequentially to avoid port conflicts
+    fileParallelism: false,
+    sequence: {
+      shuffle: false,
+    },
     maxConcurrency: 1,
     maxWorkers: 1,
     pool: 'forks',
