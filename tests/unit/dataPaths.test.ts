@@ -19,34 +19,38 @@ import { TestCleaner } from '../utils/test-helpers.js';
 
 describe('Data Paths Utilities', () => {
   const cleaner = new TestCleaner();
-  const originalEnv = process.env.TAURI;
+  const originalElectronEnv = process.env.ELECTRON_RUN_AS_NODE;
   const originalCwd = process.cwd();
 
   beforeEach(() => {
     // Reset environment
-    delete process.env.TAURI;
+    delete process.env.ELECTRON_RUN_AS_NODE;
     vi.clearAllMocks();
   });
 
   afterEach(async () => {
-    process.env.TAURI = originalEnv;
+    if (originalElectronEnv !== undefined) {
+      process.env.ELECTRON_RUN_AS_NODE = originalElectronEnv;
+    } else {
+      delete process.env.ELECTRON_RUN_AS_NODE;
+    }
     await cleaner.cleanup();
   });
 
   describe('isDesktopApp detection', () => {
     it('should detect non-desktop environment', () => {
-      delete process.env.TAURI;
+      delete process.env.ELECTRON_RUN_AS_NODE;
       // Note: isDesktopApp is imported from framework, so we test the behavior
       const dataPath = getDataPath();
       expect(dataPath).toContain(path.join(process.cwd(), 'data'));
     });
 
     it('should handle desktop environment flag', () => {
-      process.env.TAURI = '1';
-      // When TAURI is set, it should use framework's getAppDataPath
+      process.env.ELECTRON_RUN_AS_NODE = '1';
+      // When running in Electron, it should use framework's getAppDataPath
       // Since we're testing in non-desktop mode, we can't directly test desktop paths
       // but we can verify the logic paths
-      expect(process.env.TAURI).toBe('1');
+      expect(process.env.ELECTRON_RUN_AS_NODE).toBe('1');
     });
   });
 

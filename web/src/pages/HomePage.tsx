@@ -155,7 +155,7 @@ export function HomePage() {
             </li>
             <li className="flex items-start">
               <span className="text-pink-500 mr-2">•</span>
-              Deploy as web app or desktop app with Tauri
+              Deploy as web app or desktop app with Electron
             </li>
           </ul>
         </Card>

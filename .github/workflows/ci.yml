@@ -59,7 +59,7 @@ jobs:
           path: coverage/
           retention-days: 7
 
-  build-tauri:
+  build-electron:
     needs: test  # Only build if tests pass
     if: success()  # Only run if tests pass
     strategy:
@@ -67,18 +67,15 @@ jobs:
       matrix:
         include:
           - platform: 'macos-latest'
-            target: 'aarch64-apple-darwin'
-            name: 'macOS ARM64'
-          - platform: 'macos-latest'
-            target: 'x86_64-apple-darwin' 
-            name: 'macOS Intel'
+            build-cmd: 'npm run electron:build:mac'
+            name: 'macOS'
           - platform: 'ubuntu-22.04'
-            target: 'x86_64-unknown-linux-gnu'
-            name: 'Linux x64'
+            build-cmd: 'npm run electron:build:linux'
+            name: 'Linux'
           - platform: 'windows-latest'
-            target: 'x86_64-pc-windows-msvc'
-            name: 'Windows x64'
-    
+            build-cmd: 'npm run electron:build:win'
+            name: 'Windows'
+
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout
@@ -90,22 +87,6 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
-
-      - name: Setup Rust cache
-        uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: './src-tauri -> target'
-
-      - name: Install dependencies (Ubuntu)
-        if: matrix.platform == 'ubuntu-22.04'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-
       - name: Cache dependencies
         uses: actions/cache@v4
         with:
@@ -113,42 +94,30 @@ jobs:
             ~/.npm
             node_modules
             web/node_modules
-            ~/.cargo
-            src-tauri/target
-          key: ${{ runner.os }}-${{ matrix.target }}-node-${{ hashFiles('**/package-lock.json', '**/Cargo.lock') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.target }}-node-
+            ${{ runner.os }}-node-
 
       - name: Install Node dependencies
         run: |
           npm ci
           cd web && npm ci
 
-      - name: Build frontend
-        run: npm run build:web
-
-      - name: Build API
-        run: npm run build:api
-
-      - name: Bundle sidecar server
-        run: npm run build:sidecar
-        continue-on-error: true  # Allow failure for now as pkg might have issues
-
-      - name: Build Tauri app
-        uses: tauri-apps/tauri-action@v0
+      - name: Build Electron app
+        run: ${{ matrix.build-cmd }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: v__VERSION__  # Will be replaced by version from package.json
-          releaseName: 'SuperDangerous App Template v__VERSION__'
-          releaseBody: 'See the assets below for downloads'
-          releaseDraft: true
-          prerelease: false
-          args: --target ${{ matrix.target }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: tauri-${{ matrix.name }}
-          path: src-tauri/target/${{ matrix.target }}/release/bundle/
+          name: electron-${{ matrix.name }}
+          path: |
+            dist_electron/*.dmg
+            dist_electron/*.zip
+            dist_electron/*.exe
+            dist_electron/*.msi
+            dist_electron/*.deb
+            dist_electron/*.AppImage
           retention-days: 7
+          if-no-files-found: ignore

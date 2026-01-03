@@ -32,22 +32,22 @@ jobs:
           draft: true
           prerelease: false
           body: |
-            ## 🚀 SuperDangerous App Template Release
-            
-            ### ✨ Features
+            ## SuperDangerous App Template Release
+
+            ### Features
             - Comprehensive settings management with persistence
-            - WebSocket support with real-time communication  
+            - WebSocket support with real-time communication
             - SuperDangerous professional branding and UI
             - Health monitoring and diagnostics endpoints
             - Full TypeScript and modern tooling support
-            
-            ### 📦 What's Included
+
+            ### What's Included
             - Batteries-included template for SuperDangerous applications
             - Integration with @superdangerous/app-framework
             - Production-ready CI/CD configuration
-            - Cross-platform desktop app support via Tauri
-            
-            ### 📥 Downloads
+            - Cross-platform desktop app support via Electron
+
+            ### Downloads
             Platform-specific builds are available below.
 
   build-and-test:
@@ -92,36 +92,26 @@ jobs:
           files: ./app-template-${{ github.ref_name || github.event.inputs.tag }}.tar.gz
           draft: true
 
-  build-tauri:
+  build-electron:
     needs: create-release
     strategy:
       fail-fast: false
       matrix:
         include:
           - platform: 'macos-latest'
-            target: 'aarch64-apple-darwin'
-            name: 'macOS-ARM64'
-          - platform: 'macos-latest'
-            target: 'x86_64-apple-darwin' 
-            name: 'macOS-Intel'
+            build-cmd: 'npm run electron:build:mac'
+            name: 'macOS'
           - platform: 'ubuntu-22.04'
-            target: 'x86_64-unknown-linux-gnu'
-            name: 'Linux-x64'
+            build-cmd: 'npm run electron:build:linux'
+            name: 'Linux'
           - platform: 'windows-latest'
-            target: 'x86_64-pc-windows-msvc'
-            name: 'Windows-x64'
-    
+            build-cmd: 'npm run electron:build:win'
+            name: 'Windows'
+
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Checkout framework
-        uses: actions/checkout@v4
-        with:
-          repository: SuperDangerous/app-framework
-          path: ../epi-app-framework
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -129,53 +119,33 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install Rust stable
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
-
-      - name: Setup Rust cache
-        uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: './src-tauri -> target'
-
-      - name: Install dependencies (Ubuntu)
-        if: matrix.platform == 'ubuntu-22.04'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-
-      - name: Build framework
-        working-directory: ../epi-app-framework
-        run: |
-          npm ci
-          npm run build
-
       - name: Install Node dependencies
         run: |
           npm ci
           cd web && npm ci
 
-      - name: Build frontend
-        run: npm run build:web
+      - name: Build Electron app
+        run: ${{ matrix.build-cmd }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build API
-        run: npm run build:api
-
-      - name: Bundle sidecar server
-        run: npm run build:sidecar
-        continue-on-error: true
-
-      - name: Build Tauri app
-        uses: tauri-apps/tauri-action@v0
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          releaseId: ${{ needs.create-release.outputs.release_id }}
-          args: --target ${{ matrix.target }}
+          tag_name: ${{ github.ref_name || github.event.inputs.tag }}
+          files: |
+            dist_electron/*.dmg
+            dist_electron/*.zip
+            dist_electron/*.exe
+            dist_electron/*.msi
+            dist_electron/*.deb
+            dist_electron/*.AppImage
+          draft: true
 
   publish-release:
-    needs: [create-release, build-and-test, build-tauri]
+    needs: [create-release, build-and-test, build-electron]
     runs-on: ubuntu-latest
     steps:
       - name: Publish release
