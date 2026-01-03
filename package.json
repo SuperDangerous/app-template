@@ -75,7 +75,10 @@
     "framework",
     "electron"
   ],
-  "author": "SuperDangerous",
+  "author": {
+    "name": "SuperDangerous",
+    "email": "dev@superdangerous.com"
+  },
   "license": "PROPRIETARY",
   "private": true,
   "engines": {
