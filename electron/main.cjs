@@ -180,7 +180,11 @@ function startBackend() {
     return;
   }
 
-  const backendPath = path.join(app.getAppPath(), 'dist/backend/backend.js');
+  // In production, the bundled backend is extracted from asar to app.asar.unpacked
+  const appPath = app.getAppPath();
+  const backendPath = appPath.includes('app.asar')
+    ? path.join(appPath.replace('app.asar', 'app.asar.unpacked'), 'dist/server-bundle.mjs')
+    : path.join(appPath, 'dist/server-bundle.mjs');
 
   console.log(`[Electron] Starting backend from: ${backendPath}`);
 
@@ -194,9 +198,14 @@ function startBackend() {
   };
 
   try {
+    // Use unpacked path as cwd (can't use asar path as cwd)
+    const cwd = appPath.includes('app.asar')
+      ? appPath.replace('app.asar', 'app.asar.unpacked')
+      : appPath;
+
     backendProcess = spawn('node', [backendPath], {
       env,
-      cwd: app.getAppPath(),
+      cwd,
       stdio: ['ignore', 'pipe', 'pipe'],
     });
 

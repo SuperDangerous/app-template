@@ -7,10 +7,11 @@ import {
   useConnectionStatus,
 } from '@superdangerous/app-framework/ui';
 import { Toaster } from 'sonner';
-import { Home, Settings, FileText } from 'lucide-react';
+import { Home, Settings, FileText, Table2 } from 'lucide-react';
 import { HomePage } from './pages/HomePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { LogsPage } from './pages/LogsPage';
+import { DataTableExamplePage } from './pages/DataTableExamplePage';
 import { apiRequest } from './lib/api';
 
 const AppContent: React.FC = () => {
@@ -72,6 +73,7 @@ const AppContent: React.FC = () => {
 
   const navigation = [
     { name: 'Home', href: '/', icon: <Home className="h-4 w-4" /> },
+    { name: 'DataTable', href: '/datatable', icon: <Table2 className="h-4 w-4" /> },
     { name: 'Logs', href: '/logs', icon: <FileText className="h-4 w-4" /> },
     { name: 'Settings', href: '/settings', icon: <Settings className="h-4 w-4" /> },
   ];
@@ -96,6 +98,7 @@ const AppContent: React.FC = () => {
     >
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/datatable" element={<DataTableExamplePage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/logs" element={<LogsPage />} />
       </Routes>

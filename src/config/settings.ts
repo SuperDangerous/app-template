@@ -68,7 +68,19 @@ export const defaultSettings = {
   'advanced.telemetry': false,
   'advanced.experimental': false,
   'advanced.customScripts': '',
-  'advanced.environment': 'production'
+  'advanced.environment': 'production',
+
+  // Email
+  'email.enabled': false,
+  'email.provider': 'smtp',
+  'email.resendApiKey': '',
+  'email.smtpHost': '',
+  'email.smtpPort': 587,
+  'email.smtpSecure': false,
+  'email.smtpUser': '',
+  'email.smtpPass': '',
+  'email.fromAddress': 'SuperDangerous App <noreply@superdangerous.com>',
+  'email.defaultRecipients': ''
 };
 
 export const settingsMetadata = {
@@ -108,6 +120,12 @@ export const settingsMetadata = {
       label: 'Advanced',
       icon: 'advanced',
       description: 'Advanced configuration'
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      icon: 'mail',
+      description: 'Email notifications and alerts'
     }
   ]
 };

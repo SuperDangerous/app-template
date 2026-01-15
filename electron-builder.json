@@ -9,10 +9,15 @@
     "buildResources": "build"
   },
   "files": [
-    "dist/**/*",
+    "dist/server-bundle.mjs",
+    "dist/server-bundle.mjs.map",
     "web/dist/**/*",
     "electron/**/*",
     "package.json"
+  ],
+  "asarUnpack": [
+    "dist/server-bundle.mjs",
+    "dist/server-bundle.mjs.map"
   ],
   "extraMetadata": {
     "main": "electron/main.cjs"

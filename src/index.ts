@@ -20,6 +20,8 @@ import {
   healthCheck,
   WebSocketServer,
   FileInfo,
+  EmailService,
+  type EmailConfig,
 } from '@superdangerous/app-framework';
 import express from 'express';
 
@@ -52,6 +54,9 @@ const storageService = getStorageService();
 // WebSocket event manager (will be initialized after server starts)
 let wsEventManager: WebSocketEventManager | null = null;
 
+// Email service (will be initialized after settings load)
+let emailService: EmailService | null = null;
+
 async function main() {
   // Initialize settings service
   logger.info('Initializing settings service...');
@@ -65,6 +70,47 @@ async function main() {
   logger.info('Initializing storage service...');
   await storageService.initialize();
   logger.info('Storage service initialized');
+
+  // Initialize email service with SuperDangerous branding
+  if (settings['email.enabled']) {
+    logger.info('Initializing email service...');
+
+    const emailConfig: EmailConfig = {
+      enabled: settings['email.enabled'] as boolean,
+      provider: settings['email.provider'] as 'resend' | 'smtp',
+      resend: settings['email.resendApiKey'] ? {
+        apiKey: settings['email.resendApiKey'] as string,
+      } : undefined,
+      smtp: settings['email.smtpHost'] ? {
+        host: settings['email.smtpHost'] as string,
+        port: settings['email.smtpPort'] as number,
+        secure: settings['email.smtpSecure'] as boolean,
+        auth: settings['email.smtpUser'] ? {
+          user: settings['email.smtpUser'] as string,
+          pass: settings['email.smtpPass'] as string,
+        } : undefined,
+      } : undefined,
+      from: settings['email.fromAddress'] as string,
+      to: (settings['email.defaultRecipients'] as string)
+        ?.split(',')
+        .map(e => e.trim())
+        .filter(Boolean) || [],
+      // SuperDangerous branding
+      appName: 'SuperDangerous',
+      appTitle: settings['app.name'] as string || 'SuperDangerous App',
+      brandColor: '#E21350', // SuperDangerous red
+      footerText: 'Powered by SuperDangerous',
+      footerLink: 'https://superdangerous.com',
+    };
+
+    emailService = new EmailService(emailConfig);
+    await emailService.initialize();
+    logger.info('Email service initialized', {
+      provider: emailService.getStatus().provider
+    });
+  } else {
+    logger.info('Email service disabled in configuration');
+  }
 
   // Create and configure server
   const server = new StandardServer({
@@ -291,6 +337,111 @@ async function main() {
         res.json({ success: true, data: demoData, message: 'Demo data retrieved' });
       });
       
+      // Email endpoints
+      app.get('/api/email/status', (_req, res) => {
+        if (!emailService) {
+          res.json({
+            success: true,
+            data: { enabled: false, provider: 'None', recipients: [] },
+            message: 'Email service not configured'
+          });
+          return;
+        }
+        res.json({
+          success: true,
+          data: emailService.getStatus(),
+          message: 'Email service status'
+        });
+      });
+
+      app.post('/api/email/test', async (_req, res) => {
+        if (!emailService) {
+          res.status(400).json({
+            success: false,
+            message: 'Email service not configured'
+          });
+          return;
+        }
+        try {
+          await emailService.sendTestEmail();
+          res.json({
+            success: true,
+            data: { sent: true },
+            message: 'Test email sent successfully'
+          });
+        } catch (error: unknown) {
+          res.status(500).json({
+            success: false,
+            message: 'Failed to send test email',
+            error: getErrorMessage(error)
+          });
+        }
+      });
+
+      app.post('/api/email/send', express.json(), async (req, res) => {
+        if (!emailService) {
+          res.status(400).json({
+            success: false,
+            message: 'Email service not configured'
+          });
+          return;
+        }
+        try {
+          const { to, subject, text, html } = req.body;
+          if (!to || !subject) {
+            res.status(400).json({
+              success: false,
+              message: 'Missing required fields: to, subject'
+            });
+            return;
+          }
+          await emailService.sendEmail({ to, subject, text, html });
+          res.json({
+            success: true,
+            data: { sent: true },
+            message: 'Email sent successfully'
+          });
+        } catch (error: unknown) {
+          res.status(500).json({
+            success: false,
+            message: 'Failed to send email',
+            error: getErrorMessage(error)
+          });
+        }
+      });
+
+      app.post('/api/email/notify', express.json(), async (req, res) => {
+        if (!emailService) {
+          res.status(400).json({
+            success: false,
+            message: 'Email service not configured'
+          });
+          return;
+        }
+        try {
+          const { type, title, data } = req.body;
+          if (!type || !title) {
+            res.status(400).json({
+              success: false,
+              message: 'Missing required fields: type, title'
+            });
+            return;
+          }
+          await emailService.notify(type, title, data || {});
+          res.json({
+            success: true,
+            data: { sent: true },
+            message: 'Notification sent successfully'
+          });
+        } catch (error: unknown) {
+          res.status(500).json({
+            success: false,
+            message: 'Failed to send notification',
+            error: getErrorMessage(error)
+          });
+        }
+      });
+
       // Feature flags endpoint
       app.get('/api/features', (_req, res) => {
         res.json({
@@ -306,7 +457,8 @@ async function main() {
           https: settings['security.enableHttps'] === true,
           rateLimit: settings['security.rateLimit'] !== false,
           backup: settings['storage.enableBackup'] !== false,
-          debugMode: settings['advanced.debugMode'] === true
+          debugMode: settings['advanced.debugMode'] === true,
+          email: settings['email.enabled'] === true
           },
           message: 'Feature flags'
         });
@@ -422,14 +574,20 @@ process.on('unhandledRejection', (reason, promise) => {
 // Graceful shutdown handlers
 const shutdown = async (signal: string) => {
   logger.info(`📴 ${signal} received, initiating graceful shutdown...`);
-  
+
   try {
     // Save any pending settings
     if (settingsService) {
       await settingsService.save();
       logger.info('Settings saved');
     }
-    
+
+    // Shutdown email service
+    if (emailService) {
+      await emailService.shutdown();
+      logger.info('Email service shut down');
+    }
+
     // Close WebSocket connections
     if (wsEventManager) {
       wsEventManager.broadcast('system', {
@@ -438,10 +596,10 @@ const shutdown = async (signal: string) => {
         data: { message: 'Server is shutting down' }
       });
     }
-    
+
     // Log final message
     logger.info('👋 Shutdown complete. Goodbye!');
-    
+
     process.exit(0);
   } catch (error) {
     logger.error('Error during shutdown:', error);
