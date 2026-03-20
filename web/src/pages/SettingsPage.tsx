@@ -3,13 +3,39 @@
  */
 
 import React from 'react';
-import { SettingsPage as FrameworkSettingsPage, defaultSettingsCategories } from '@superdangerous/app-framework/ui';
+import { SettingsPage as FrameworkSettingsPage } from '@superdangerous/app-framework/ui';
 import { Settings, Network, FileText, Shield, Bell } from 'lucide-react';
 import { api } from '../utils/api';
 import { toast } from 'sonner';
 
+interface AppSettingOption {
+  value: string;
+  label: string;
+}
+
+interface AppSetting {
+  key: string;
+  label: string;
+  description: string;
+  type: 'text' | 'select' | 'boolean' | 'number';
+  defaultValue: string | number | boolean;
+  options?: AppSettingOption[];
+  validation?: (value: string) => string | null;
+  min?: number;
+  max?: number;
+  requiresRestart?: boolean;
+}
+
+interface AppSettingsCategory {
+  id: string;
+  label: string;
+  description: string;
+  icon: React.ReactNode;
+  settings: AppSetting[];
+}
+
 // Define app-specific settings categories
-const appCategories = [
+const appCategories: AppSettingsCategory[] = [
   {
     id: 'general',
     label: 'General',
@@ -236,7 +262,7 @@ export function SettingsPage() {
 
   const handleRestart = async () => {
     try {
-      await api.post('/api/system/restart');
+      await api.post('/api/system/restart', {});
       toast.success('Application restarting...');
       setTimeout(() => window.location.reload(), 3000);
     } catch (error) {

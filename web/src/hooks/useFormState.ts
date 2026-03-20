@@ -24,6 +24,8 @@ export function useFormState({
   onSave,
   timeout = 15000
 }: UseFormStateOptions): FormState {
+  void timeout;
+
   const [values, setValues] = useState(initialValues);
   const [originalValues, setOriginalValues] = useState(initialValues);
   const [isSaving, setIsSaving] = useState(false);

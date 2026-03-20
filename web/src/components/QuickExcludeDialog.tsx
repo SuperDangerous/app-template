@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { X, AlertTriangle, FileText, HardDrive, FileCode, FileJson, Image, Archive, FileType, File } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { AlertTriangle, FileText, HardDrive, FileCode, FileJson, Image, Archive, File } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, Button, Checkbox, Badge } from '@superdangerous/app-framework/ui';
-import { formatBytes, cn } from '@/lib/utils';
+import { cn, formatBytes } from '@/lib/utils';
 import { toast } from 'sonner';
 import { apiRequest } from '@/lib/api';
 

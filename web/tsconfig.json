@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "Bundler",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "strict": true,
     "esModuleInterop": true,
@@ -11,6 +11,7 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "jsx": "react-jsx",
+    "types": ["vite/client"],
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
     "noUnusedLocals": true,
@@ -25,4 +26,3 @@
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "coverage"]
 }
-

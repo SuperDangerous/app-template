@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import {
   AppLayout,
   ConnectionOverlay,
@@ -15,14 +15,11 @@ import { DataTableExamplePage } from './pages/DataTableExamplePage';
 import { apiRequest } from './lib/api';
 
 const AppContent: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
   const [appInfo, setAppInfo] = useState({ name: 'App Template', version: '1.0.0' });
-  const [apiReady, setApiReady] = useState(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const { connected } = useConnectionStatus();
   const [, socketActions] = useSocketIO();
-  const overlayTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const overlayTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (connected) {
@@ -62,12 +59,10 @@ const AppContent: React.FC = () => {
         };
         setAppInfo(appData);
         document.title = appData.name;
-        setApiReady(true);
       })
       .catch((err) => {
         console.error('Failed to fetch app info:', err);
         document.title = 'App Template';
-        setApiReady(true);
       });
   }, []);
 
@@ -89,12 +84,11 @@ const AppContent: React.FC = () => {
       appVersion={appInfo.version}
       logoSrc="/assets/superdangerous-dark.svg"
       navigation={navigation}
-      currentPath={location.pathname}
-      onNavigate={navigate}
-      showConnectionStatus={true}
       primaryColor="#E21350"
       connectionStatusUrl={import.meta.env.VITE_API_URL || 'http://localhost:7500'}
       showLogout={false}
+      navLayout="inline"
+      navActiveStyle="pill"
     >
       <Routes>
         <Route path="/" element={<HomePage />} />

@@ -119,6 +119,8 @@ export function ProjectDialog({ project, onClose, onSave }: ProjectDialogProps) 
         setError('Path is not a directory');
         return false;
       }
+
+      return false;
     } catch (error) {
       setError('Failed to validate path');
       return false;

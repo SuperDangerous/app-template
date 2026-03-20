@@ -94,48 +94,39 @@ export function DataTableExamplePage() {
       {
         id: 'name',
         header: 'Name',
-        accessorKey: 'name',
-        enableSorting: true,
-        cell: ({ row }) => (
-          <div className="font-medium">{row.original.name}</div>
-        ),
+        sortKey: 'name',
+        cell: (user) => <div className="font-medium">{user.name}</div>,
       },
       {
         id: 'email',
         header: 'Email',
-        accessorKey: 'email',
-        enableSorting: true,
-        cell: ({ row }) => (
-          <span className="text-muted-foreground">{row.original.email}</span>
-        ),
+        sortKey: 'email',
+        cell: (user) => <span className="text-muted-foreground">{user.email}</span>,
       },
       {
         id: 'department',
         header: 'Department',
-        accessorKey: 'department',
-        enableSorting: true,
+        sortKey: 'department',
+        cell: (user) => user.department,
       },
       {
         id: 'role',
         header: 'Role',
-        accessorKey: 'role',
-        enableSorting: true,
-        cell: ({ row }) => <RoleBadge role={row.original.role} />,
+        sortKey: 'role',
+        cell: (user) => <RoleBadge role={user.role} />,
       },
       {
         id: 'status',
         header: 'Status',
-        accessorKey: 'status',
-        enableSorting: true,
-        cell: ({ row }) => <StatusBadge status={row.original.status} />,
+        sortKey: 'status',
+        cell: (user) => <StatusBadge status={user.status} />,
       },
       {
         id: 'lastLogin',
         header: 'Last Login',
-        accessorKey: 'lastLogin',
-        enableSorting: true,
-        cell: ({ row }) => {
-          const date = new Date(row.original.lastLogin);
+        sortKey: 'lastLogin',
+        cell: (user) => {
+          const date = new Date(user.lastLogin);
           return (
             <span className="text-muted-foreground text-sm">
               {date.toLocaleDateString()}
@@ -231,14 +222,14 @@ export function DataTableExamplePage() {
 
       {/* DataTable */}
       <Card className="p-6">
-        <DataTable
+        <DataTable<User>
           key={refreshKey}
           data={users}
           columns={columns}
-          filterPlaceholder="Search users..."
-          emptyMessage="No users found"
-          showPagination={true}
-          defaultPageSize={10}
+          storageKey="app-template-demo-users"
+          getRowId={(user) => user.id}
+          pageSize={10}
+          emptyState="No users found"
         />
       </Card>
 

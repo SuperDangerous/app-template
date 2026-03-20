@@ -23,7 +23,6 @@ interface AppShellProps {
 
 export const AppShell: React.FC<AppShellProps> = ({
   appName,
-  appVersion,
   navigation,
   currentPath,
   onNavigate,

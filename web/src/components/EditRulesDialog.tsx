@@ -181,10 +181,7 @@ export function EditRulesDialog({ project, onClose, onSave }: EditRulesDialogPro
             <button
               type="submit"
               className="px-4 py-2 text-white rounded-md transition-colors"
-              style={{ 
-                backgroundColor: '#E21350',
-                '&:hover': { backgroundColor: '#C10E42' }
-              }}
+              style={{ backgroundColor: '#E21350' }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#C10E42'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E21350'}
             >
